@@ -75,7 +75,7 @@ app.post('/api/data/range', function(req, res, next) {
 	});
 });
 
-databox_directory.register_datastore('databox-store-blob', ':8080/')
+databox_directory.register_datastore('databox-store-blob', ':8080/api')
   .then( (ids)=>{
 	   app.listen(8080);
   })
