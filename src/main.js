@@ -52,7 +52,7 @@ app.post('/data/latest', function(req, res, next) {
 app.post('/data/since', function(req, res, next) {
     var sensor_id = req.body.sensor_id;
     var timestamp = req.body.timestamp;
-    db.find({sensor_id: sensor_id, $where: function(){return this.timestamp > timestamp;} },function (err, doc) {
+    db.find({sensor_id: sensor_id, $where: function(){return this.timestamp > timestamp} }).sort({timestamp: 1}).exec(function (err, doc) {
 		if (err) {
 			console.log("[Error]:: /data/since", sensor_id, timestamp);
       		res.send(err);
@@ -66,9 +66,9 @@ app.post('/data/range', function(req, res, next) {
     var start = req.body.start;
     var end = req.body.end;
 
-    db.find({sensor_id: sensor_id, $where: function(){return this.timestamp > start && this.timestamp < end;} },function (err, doc) {
+    db.find({sensor_id: sensor_id, $where: function(){return this.timestamp >= start && this.timestamp <= end;} }).sort({timestamp: 1}).exec(function (err, doc) {
 		if (err) {
-			console.log("[Error]:: /data/since", sensor_id, timestamp);
+			console.log("[Error]:: /data/range", sensor_id, timestamp);
       		res.send(err);
 		}
 		res.send(doc);

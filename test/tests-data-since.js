@@ -3,6 +3,9 @@ app.locals.debug = true;
 var supertest = require("supertest")(app);
 var assert = require('assert');
 
+
+var recordSet = []; // store res from can POST /data/since to test /data/range
+
 describe('tests /data/since', function() {
 	var data = {
 	    	"data": {new:"data", since:"world"},
@@ -140,7 +143,7 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it('can POST /data/since ' + lastRecord.timestamp  + ' and returns 5 items',function(done){
+	it('can POST /data/since ' + lastRecord.timestamp  + ' and returns 6 items',function(done){
 		
 		data = {
 					"timestamp": lastRecord.timestamp,
@@ -148,7 +151,7 @@ describe('tests /data/since', function() {
 				};
 
 		supertest
-				.post("/data/latest")
+				.post("/data/since")
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -156,10 +159,37 @@ describe('tests /data/since', function() {
 						assert.fail("","",err);
 						done()
 					}
-					console.log(data.body);
-					assert.equal(result.body.length, 5);
+					assert.equal(result.body.length, 6);
+					recordSet = result.body
 					done()
 				});
 	});
 
+});
+
+describe('tests /data/range', function() {
+	
+		it('can POST /data/range and retrive data ',function(done){
+		
+			var data = {
+	    	"start": recordSet[1].timestamp,
+	    	"end": recordSet[4].timestamp,
+	    	"sensor_id": 11,
+	    	"vendor_id": 1
+			}; 
+
+			supertest
+					.post("/data/range")
+					.send(data)
+					.expect(200)
+					.end(function(err,result){
+						if(err) {
+							assert.fail("","",err);
+							done()
+						}
+						assert.equal(result.body.length, 4);
+						recordSet = result.body
+						done()
+					});
+		});
 });
