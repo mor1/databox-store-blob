@@ -3,7 +3,7 @@ FROM node:argon
 ADD package.json package.json
 RUN npm install && npm run clean
 
-ADD ./src .
+ADD . .
 
 LABEL databox.type="store"
 

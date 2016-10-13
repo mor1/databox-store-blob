@@ -6,11 +6,7 @@ var databox_directory_url = process.env.DATABOX_DIRECTORY_ENDPOINT
 
 exports.register_datastore = function(hostname, api_url) { // requires a description which is most liekely the vendor name and must be unique, will return databox global vendor id
 	
-  if(typeof databox_directory_url == 'undefined') {
-    return Promise.reject('');
-  }
-
-  var options = {
+   var options = {
         uri: databox_directory_url+'/datastore/register',
         method: 'POST',
         json: 
@@ -22,9 +18,9 @@ exports.register_datastore = function(hostname, api_url) { // requires a descrip
 
   return new Promise((resolve, reject) => {
     
-    register_datastore_callback = function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-          console.log(err);
+    var register_datastore_callback = function (error, response, body) {
+        if (error) {
+          console.log(error);
           console.log("Can not register datastore with directory! waiting 5s before retrying");
           setTimeout(request, 5000, options, register_datastore_callback);
         }

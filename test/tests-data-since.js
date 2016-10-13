@@ -6,7 +6,7 @@ var assert = require('assert');
 
 var recordSet = []; // store res from can POST /data/since to test /data/range
 
-describe('tests /data/since', function() {
+describe('tests /api/data/since', function() {
 	var data = {
 	    	"data": {new:"data", since:"world"},
 	    	"sensor_id": 11,
@@ -14,14 +14,14 @@ describe('tests /data/since', function() {
 		}; 
 	var lastRecord = {};
 	
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -32,7 +32,7 @@ describe('tests /data/since', function() {
 
 	it('can get lastRecord',function(done){
 		supertest
-				.post("/data/latest")
+				.post("/api/data/latest")
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -47,14 +47,14 @@ describe('tests /data/since', function() {
 				});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -63,14 +63,14 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world0"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -79,14 +79,14 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world1"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -95,14 +95,14 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world2"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -111,14 +111,14 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world3"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -127,14 +127,14 @@ describe('tests /data/since', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world4"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -151,7 +151,7 @@ describe('tests /data/since', function() {
 				};
 
 		supertest
-				.post("/data/since")
+				.post("/api/data/since")
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -167,9 +167,9 @@ describe('tests /data/since', function() {
 
 });
 
-describe('tests /data/range', function() {
+describe('tests /api/data/range', function() {
 	
-		it('can POST /data/range and retrive data ',function(done){
+		it('can POST /api/data/range and retrive data ',function(done){
 		
 			var data = {
 	    	"start": recordSet[1].timestamp,
@@ -179,7 +179,7 @@ describe('tests /data/range', function() {
 			}; 
 
 			supertest
-					.post("/data/range")
+					.post("/api/data/range")
 					.send(data)
 					.expect(200)
 					.end(function(err,result){

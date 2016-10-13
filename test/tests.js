@@ -11,14 +11,14 @@ it("Responds with 'active'", function(done) {
 });
 
 describe('Add and retrieve latest', function() {
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -27,13 +27,13 @@ describe('Add and retrieve latest', function() {
 			});
 	})
 
-	it("retrieves latest records with /data/latest", function(done) {
+	it("retrieves latest records with /api/data/latest", function(done) {
 		var data = {
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data/latest")
+			.post("/api/data/latest")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -49,14 +49,14 @@ describe('Add and retrieve latest', function() {
 });
 
 describe('Checks add and retrieve latest with more docs', function() {
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"data", goodby:"world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -71,7 +71,7 @@ describe('Checks add and retrieve latest with more docs', function() {
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data/latest")
+			.post("/api/data/latest")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -84,14 +84,14 @@ describe('Checks add and retrieve latest with more docs', function() {
 			});
 	});
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"testing", goodby:"world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -100,14 +100,14 @@ describe('Checks add and retrieve latest with more docs', function() {
 			});
 	})
 
-	it("Adds records posted to /data", function(done) {
+	it("Adds records posted to /api/data", function(done) {
 		var data = {
 	    	"data": {test:"testing", goodby:"cruel world"},
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data")
+			.post("/api/data")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -116,13 +116,13 @@ describe('Checks add and retrieve latest with more docs', function() {
 			});
 	})
 
-	it("retrieves latest records with /data/latest", function(done) {
+	it("retrieves latest records with /api/data/latest", function(done) {
 		var data = {
 	    	"sensor_id": 11,
 	    	"vendor_id": 1
 		}; 
 		supertest
-			.post("/data/latest")
+			.post("/api/data/latest")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){

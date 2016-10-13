@@ -18,7 +18,7 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 ADD package.json package.json
 RUN npm install && npm run clean
 
-ADD ./src .
+ADD . .
 
 LABEL databox.type="store"
 

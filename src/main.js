@@ -20,7 +20,7 @@ app.get("/status", function(req, res) {
     res.send("active");
 });
 
-app.post("/data", function(req, res, next) {
+app.post("/api/data", function(req, res, next) {
    
     var data = {
     	"data": req.body.data,
@@ -38,7 +38,7 @@ app.post("/data", function(req, res, next) {
 	})
 });
 
-app.post('/data/latest', function(req, res, next) {
+app.post('/api/data/latest', function(req, res, next) {
     var sensor_id = req.body.sensor_id;
     db.find({sensor_id: sensor_id}).sort({timestamp: -1}).limit(1).exec(function (err, doc) {
 		if (err) {
@@ -49,7 +49,7 @@ app.post('/data/latest', function(req, res, next) {
 	});
 });
 
-app.post('/data/since', function(req, res, next) {
+app.post('/api/data/since', function(req, res, next) {
     var sensor_id = req.body.sensor_id;
     var timestamp = req.body.timestamp;
     db.find({sensor_id: sensor_id, $where: function(){return this.timestamp > timestamp} }).sort({timestamp: 1}).exec(function (err, doc) {
@@ -61,7 +61,7 @@ app.post('/data/since', function(req, res, next) {
 	});
 });
 
-app.post('/data/range', function(req, res, next) {
+app.post('/api/data/range', function(req, res, next) {
     var sensor_id = req.body.sensor_id;
     var start = req.body.start;
     var end = req.body.end;
@@ -77,7 +77,7 @@ app.post('/data/range', function(req, res, next) {
 
 databox_directory.register_datastore('databox-store-blob', ':8080/')
   .then( (ids)=>{
-	app.listen(8080);
+	   app.listen(8080);
   })
   .catch((err) => {
   	console.log(err)

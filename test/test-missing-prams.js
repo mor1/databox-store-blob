@@ -11,7 +11,7 @@ describe('Behavior with invalid/missing prams sensor_id', function(){
 	    	"vendor_id": 99
 		}; 
 		supertest
-			.post("/data/latest")
+			.post("/api/data/latest")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -29,7 +29,7 @@ describe('Behavior with invalid/missing prams sensor_id', function(){
 		var data = {
 		}; 
 		supertest
-			.post("/data/latest")
+			.post("/api/data/latest")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
