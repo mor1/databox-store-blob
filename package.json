@@ -7,7 +7,7 @@
     "start": "node ./src/main.js",
     "build": "docker build -t databox/databox-store-blob .",
     "deploy": "docker tag databox/databox-store-blob registry.upintheclouds.org/databox-store-blob && docker push registry.upintheclouds.org/databox-store-blob",
-    "build-arm": "docker -f Dockerfile-arm build -t databox/databox-store-blob-arm .",
+    "build-arm": "docker build -f Dockerfile-arm -t databox/databox-store-blob-arm .",
     "deploy-arm": "docker tag databox/databox-store-blob-arm registry.upintheclouds.org/databox-store-blob-arm && docker push registry.upintheclouds.org/databox-store-blob-arm",
     "clean": "node ./node_modules/modclean/bin/modclean.js -p ./node_modules/ -r",
     "getshell": "docker exec -i -t databox-store-blob /bin/bash",
@@ -28,7 +28,8 @@
     "modclean": "",
     "nedb": "^1.8.0",
     "promise": "^7.1.1",
-    "request": "^2.75.0"
+    "request": "^2.75.0",
+    "modclean":""
   },
   "devDependencies": {
     "assert": "^1.4.1",
