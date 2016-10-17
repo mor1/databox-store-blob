@@ -8,6 +8,8 @@
   "author": "Anthony Brown <Anthony.Brown@nottingham.ac.uk> ()",
   "license": "MIT",
 
+	"databox-type":"store",
+
   "tags": [
     "store",
     "blob",
