@@ -1,8 +1,8 @@
 # databox-store-blob
 
-Databox Store for json data blobs. 
+Databox Store for JSON data blobs. 
 
-The datastore exposes a http based api on port 8080 and a websocket based API for live data.
+The datastore exposes an HTTP based API on port 8080 and a WebSocket based API for live data.
 
 #HTTP API
 
@@ -32,11 +32,11 @@ Connect to a websocket client to port 8080. Send a message of the form
 
      {sensor_id: [sendor id]}
      
-Data from that sensor will then be braudcast over the connection. This feature will devlop and will support authentication and more in future.
+Data from that sensor will then be broadcast over the connection. This feature will develop and will support authentication and more in future.
 
 #Status
 
-This is work in progress. Expect bugs and api changes.
+This is work in progress. Expect bugs and API changes.
 
 #Building running
 
@@ -44,5 +44,5 @@ This is work in progress. Expect bugs and api changes.
 
 #Testing
 
-	npm install --development 
-	npm test
+    npm install --development 
+    npm test
