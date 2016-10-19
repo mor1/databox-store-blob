@@ -2,7 +2,9 @@
 
 Databox Store for json data blobs. 
 
-the datastore exposes a http based api on port 8080 withe following end points
+The datastore exposes a http based api on port 8080 and a websocket based API for live data.
+
+#HTTP API
 
     Method: POST
     URL: /api/data/
@@ -23,7 +25,15 @@ the datastore exposes a http based api on port 8080 withe following end points
     URL: /api/data/range
     Parameters: Raw JSON body containing elements as follows {sensor_id: <sensor ID>, start: <start timestamp>, end: <end timestamp>}
     Notes: will return the data added between start and end based on the databox wide sensor_id
-    
+
+#Websockets 
+
+Connect to a websocket client to port 8080. Send a message of the form 
+
+     {sensor_id: [sendor id]}
+     
+Data from that sensor will then be braudcast over the connection. This feature will devlop and will support authentication and more in future.
+
 #Status
 
 This is work in progress. Expect bugs and api changes.
