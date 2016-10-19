@@ -23,6 +23,7 @@ exports.register_datastore = function(hostname, api_url) { // requires a descrip
           console.log(error);
           console.log("Can not register datastore with directory! waiting 5s before retrying");
           setTimeout(request, 5000, options, register_datastore_callback);
+          return;
         }
         resolve(body);
     }

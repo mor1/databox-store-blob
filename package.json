@@ -29,7 +29,7 @@
     "nedb": "^1.8.0",
     "promise": "^7.1.1",
     "request": "^2.75.0",
-    "modclean":""
+    "ws": "^1.1.1"
   },
   "devDependencies": {
     "assert": "^1.4.1",
