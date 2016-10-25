@@ -3,7 +3,7 @@ var bodyParser = require("body-parser");
 var databox_directory = require("./utils/databox_directory.js");
 
 var timeseriesRouter = require('./timeseries.js');
-var keyValueRouter = require('./key-valuer-router.js');
+var keyValueRouter = require('./keyvalue.js');
 
 var app = express();
 

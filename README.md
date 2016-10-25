@@ -31,12 +31,12 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 
     Method: GET
     URL: /api/key/<key>
-    Parameters: replace <key> with documant key 
-    Notes: will return the data stored with that key. Returns an empty array \[\] if no data is stored
+    Parameters: replace <key> with document key 
+    Notes: will return the data stored with that key. Returns an empty array 404 {status:404,error:"Document not found."} if no data is stored
 
     Method: POST
     URL: /api/key/<key>
-    Parameters: Raw JSON body containing elements as follows {data: <data to be stored in JSON fomat>}
+    Parameters: Raw JSON body containing elements as follows {<data to be stored in JSON format>}
     Notes: will insert if the <key> is not in the database and update the document if it is.
 
 
@@ -44,13 +44,13 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 
 Connect to a websocket client to port 8080. Send a message of the form 
 
-     {sensor_id: [sendor data]} /for timeseries store
+     {sensor_id: [senor data]} /for timeseries store
      
 OR
      
      {key: [value data]} /for key value store
      
-Data from that sensor will then be broadcast over the connection. This feature will develop and will support authentication and more in future.
+Data from that sensor/key will then be broadcast over the connection. This feature will develop and will support authentication and more in future.
 
 #Status
 
