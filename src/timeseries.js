@@ -32,7 +32,7 @@ module.exports = function (expressApp) {
         res.send(doc);
       });
 
-      app.broadcastDataOverWebSocket(req.body.sensor_id,data);
+      app.broadcastDataOverWebSocket(req.body.sensor_id,data,'ts');
 
     });
 

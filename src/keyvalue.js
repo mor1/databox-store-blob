@@ -27,7 +27,7 @@ module.exports = function (expressApp) {
             res.send(affectedDocuments.data);
         });
 
-        app.broadcastDataOverWebSocket(key,req.body);
+        app.broadcastDataOverWebSocket(key,req.body,'kv');
 
     });
 
