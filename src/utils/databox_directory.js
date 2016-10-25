@@ -50,3 +50,24 @@ exports.check_sensor_id = function(sensor_id, done) { // requires a description 
       return done(error);
   });
 }
+
+
+exports.get_driver_hostname_from_actuator_id = function(actuator_id) {  
+  return new Promise((resolve, reject) => { 
+    var options = { 
+      uri: databox_directory_url+'/actuator/'+actuator_id+'/driver_hostname', 
+      method: 'get', 
+    }; 
+  
+    request(options, function (error, response, body) { 
+      console.log("get_driver_hostname_from_actuator_id", error, body, typeof body); 
+      if (error) { 
+        reject(body); 
+        return; 
+      } 
+      body = JSON.parse(body); 
+      console.log("body.hostname = " + body.hostname); 
+      resolve(body.hostname); 
+    }); 
+  }); 
+}
