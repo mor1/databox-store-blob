@@ -73,8 +73,6 @@ app.broadcastDataOverWebSocket = function (sensor_id, data) {
 };
 
 
-server.listen(8080);
-
 databox_directory.register_datastore('databox-store-blob', ':8080/api')
   .then( (ids)=>{
 	   server.listen(8080);
