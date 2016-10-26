@@ -7,6 +7,8 @@ ADD . .
 
 LABEL databox.type="store"
 
+VOLUME ["/database"]
+
 EXPOSE 8080
 
 CMD ["npm","start"]
