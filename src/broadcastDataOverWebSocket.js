@@ -47,14 +47,31 @@ module.exports = function (app) {
     return function broadcastDataOverWebSocket(id, data, streamType) {
         
         if(streamType == 'ts' && id in connectionsBySensorId) {
-            connectionsBySensorId[id].map((val,ind,arr)=>{
-                val.send(JSON.stringify(data));
+            connectionsBySensorId[id].map((ws,ind,arr)=>{
+                try{
+                    ws.send(JSON.stringify(data),(err)=>{
+                    if(err) {
+                        console.log("WS ERROR::",err);
+                    }
+                });
+                } catch (err) {
+                    console.log("WS ERROR::",err);
+                }
+                
             });
         }
 
         if(streamType == 'kv' && id in connectionsByKey) {
-            connectionsByKey[id].map((val,ind,arr)=>{
-                val.send(JSON.stringify(data));
+            connectionsBySensorId[id].map((ws,ind,arr)=>{
+                try{
+                    ws.send(JSON.stringify(data),(err)=>{
+                    if(err) {
+                        console.log("WS ERROR::",err);
+                    }
+                });
+                } catch (err) {
+                    console.log("WS ERROR::",err);
+                }
             });
         }
     };
