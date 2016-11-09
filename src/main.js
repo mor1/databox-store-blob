@@ -11,6 +11,7 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME;
 
 //TODO app.use(Macaroon checker);
 
@@ -33,7 +34,7 @@ app.wss = new WebSocketServer({ server: server })
 app.broadcastDataOverWebSocket = require('./broadcastDataOverWebSocket.js')(app)
 
 
-databox_directory.register_datastore('databox-store-blob', ':8080/api')
+databox_directory.register_datastore(DATABOX_LOCAL_NAME, ':8080/api')
   .then( (ids)=>{
 	   server.listen(8080);
   })
