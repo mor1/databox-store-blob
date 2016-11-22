@@ -19,6 +19,9 @@ var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
 app.get("/status", function(req, res) {
     res.send("active");
 });
+app.get("/api/status", function(req, res) {
+    res.send("active");
+});
 
 app.use('/api/actuate',actuateRouter(app));
 
