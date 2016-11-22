@@ -20,12 +20,13 @@ module.exports = function (expressApp) {
         var sensortype = req.body.sensor_type;
         var unit = req.body.unit;
         var location = req.body.location;
+        var description = req.body.description;
 
         var item = {
             "item-metadata": [
                 {
                     "rel": "urn:X-hypercat:rels:hasDescription:en",
-                    "val": id
+                    "val": description
                 },
                 {
                     "rel": "urn:X-databox:rels:vendor",
