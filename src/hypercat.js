@@ -15,12 +15,13 @@ module.exports = function (expressApp) {
     router.post('/add/:datasourceid',function(req, res, next) {
         
         var id = req.params.datasourceid;
-
         var vendor = req.body.vendor;
         var sensortype = req.body.sensor_type;
         var unit = req.body.unit;
         var location = req.body.location;
         var description = req.body.description;
+
+        console.log("Adding data source to the current Hypercat catalogue", id);
 
         var item = {
             "item-metadata": [

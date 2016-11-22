@@ -29,7 +29,7 @@ app.use('/:var(api/data|api/ts)?',timeseriesRouter(app));
 
 app.use('/api/key',keyValueRouter(app));
 
-app.use('/cat',hypercat(app));
+app.use('/api/cat',hypercat(app));
 
 
 
