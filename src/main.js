@@ -5,13 +5,14 @@ var databox_directory = require("./utils/databox_directory.js");
 var timeseriesRouter = require('./timeseries.js');
 var keyValueRouter = require('./keyvalue.js');
 var actuateRouter = require('./actuate.js');
+var hypercat = require('./hypercat.js');
 
 var app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME;
+var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
 
 //TODO app.use(Macaroon checker);
 
@@ -25,6 +26,8 @@ app.use('/:var(api/data|api/ts)?',timeseriesRouter(app));
 
 app.use('/api/key',keyValueRouter(app));
 
+app.use('/cat',hypercat(app));
+
 
 
 //Websocket connection to live stream data
@@ -34,13 +37,13 @@ app.wss = new WebSocketServer({ server: server })
 app.broadcastDataOverWebSocket = require('./broadcastDataOverWebSocket.js')(app)
 
 
-databox_directory.register_datastore(DATABOX_LOCAL_NAME, ':8080/api')
+/*databox_directory.register_datastore(DATABOX_LOCAL_NAME, ':8080/api')
   .then( (ids)=>{
 	   server.listen(8080);
   })
   .catch((err) => {
   	console.log(err)
-  });
+  });*/
 
- module.exports = app;
-
+server.listen(8080);
+module.exports = app;
