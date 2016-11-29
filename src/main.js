@@ -8,11 +8,6 @@ var keyValueRouter = require('./keyvalue.js');
 var actuateRouter = require('./actuate.js');
 var hypercat = require('./hypercat.js');
 
-var app = express();
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
-
 var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
 
 var HTTPS_CLIENT_CERT = process.env.HTTPS_CLIENT_CERT || '';
@@ -22,6 +17,19 @@ var credentials = {
 	cert: HTTPS_CLIENT_CERT,
 };
 
+var app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+/*
+* DATABOX API Logging
+* Logs all requests and responses to/from the API in bunyan format in nedb
+*/
+var logsDb = require('./lib/log/databox-log-db.js')('../database/datastoreLOG.db');
+var databoxLoggerApi = require('./lib/log/databox-log-api.js');
+var databoxLogger = require('./lib/log/databox-log-middelware.js')(logsDb);
+app.use(databoxLogger);
 
 
 //TODO app.use(Macaroon checker);
@@ -41,13 +49,25 @@ app.use('/api/key',keyValueRouter(app));
 
 app.use('/api/cat',hypercat(app));
 
+app.use('/logs',databoxLoggerApi(app,logsDb));
 
+
+
+var server = null;
+if(credentials.cert === '' || credentials.key === '') {
+    var http = require('http');
+    console.log("WARNING NO HTTPS credentials supplied running in http mode!!!!");
+    server = http.createServer(app);
+} else {
+    server = https.createServer(credentials,app);
+}
 
 //Websocket connection to live stream data
-var server = https.createServer(credentials,app);
 var WebSocketServer = require('ws').Server;
 app.wss = new WebSocketServer({ server: server });
 app.broadcastDataOverWebSocket = require('./broadcastDataOverWebSocket.js')(app);
 
-server.listen(8080);
+server.listen(8080,function() {
+    console.log("listening on 8080");
+});
 module.exports = app;

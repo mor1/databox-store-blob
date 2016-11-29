@@ -27,6 +27,8 @@
   "homepage": "https://github.com/Toshbrown/databox-store-blob#readme",
   "dependencies": {
     "body-parser": "^1.15.2",
+    "bunyan": "^1.8.5",
+    "bunyan-middleware": "^0.5.1",
     "express": "^4.14.0",
     "modclean": "",
     "nedb": "^1.8.0",
