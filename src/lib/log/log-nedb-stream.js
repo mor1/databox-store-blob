@@ -1,12 +1,11 @@
 
-module.exports = function (options) {
+module.exports = function (options, database) {
 
     var stream = require('stream');
     var util = require('util');
     var Writable = stream.Writable;
-    var Datastore = require('nedb');
-    var db = new Datastore({filename: '../database/datastoreLOG.db', autoload: true});
-    db.ensureIndex({fieldName: 'req_id', unique: false});
+    
+    var db = database;
 
     if (!options) {
         options = {};

@@ -26,8 +26,10 @@ app.use(bodyParser.urlencoded({extended: true}));
 * DATABOX API Logging
 * Logs all requests and responses to/from the API in bunyan format in nedb
 */
-var databoxLogger = require('./lib/log/databox-log-middelware.js');
-app.use(databoxLogger());
+var logsDb = require('./lib/log/databox-log-db.js')('../database/datastoreLOG.db');
+var databoxLoggerApi = require('./lib/log/databox-log-api.js');
+var databoxLogger = require('./lib/log/databox-log-middelware.js')(logsDb);
+app.use(databoxLogger);
 
 
 //TODO app.use(Macaroon checker);
@@ -47,6 +49,7 @@ app.use('/api/key',keyValueRouter(app));
 
 app.use('/api/cat',hypercat(app));
 
+app.use('/logs',databoxLoggerApi(app,logsDb));
 
 
 

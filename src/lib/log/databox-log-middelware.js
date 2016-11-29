@@ -4,11 +4,13 @@
 * Logs all requests and responses to the API in bunyan format in nedb
 */
 
-module.exports = function() {
+module.exports = function(database) {
+    
+
     var uuid = require('node-uuid');
     var bunyan = require('bunyan');
     var bunyanMiddleware = require('bunyan-middleware');
-    var logStream = require('./log-nedb-stream.js')();
+    var logStream = require('./log-nedb-stream.js')({},database);
     var logger = bunyan.createLogger({
         name: 'databoxLogger',
         streams: [
@@ -38,16 +40,17 @@ module.exports = function() {
     }
 
     return bunyanMiddleware(
-        { headerName: 'X-Request-Id', 
-        propertyName: 'reqId', 
-        logName: 'req_id',
-        verbose:false,
-        obscureHeaders: [], 
-        logger: logger,
-        additionalRequestFinishData: function(req, res) {
-                return {};
-            }
-        }
+            { 
+                headerName: 'X-Request-Id', 
+                propertyName: 'reqId', 
+                logName: 'req_id',
+                verbose:false,
+                obscureHeaders: [], 
+                logger: logger,
+                additionalRequestFinishData: function(req, res) {
+                        return {};
+                    }
+             }
     );
 
 };
