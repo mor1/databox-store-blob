@@ -44,7 +44,7 @@ module.exports.verifier = function (secret, storeName) {
 	 * @param {String} caveat
 	 * @return {Boolean} valid
 	 */
-	var isPathtValid = function () {
+	var isPathValid = function () {
 		var prefixRegex = /path = .*/;
 		var prefixLen   = 'path = '.length;
 
