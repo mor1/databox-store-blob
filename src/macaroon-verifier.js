@@ -32,8 +32,8 @@ module.exports.getSecretFromArbiter = function(arbiterKey) {
 
 
 /**
- * @param {String} Arbiter shared secret key
- * @param {String} Store hostname
+ * @param {String} secret Arbiter shared secret key
+ * @param {String} storeName Store hostname
  * @return {Function} Macaroon verification middleware
  */
 module.exports.verifier = function (secret, storeName) {
