@@ -32,6 +32,7 @@
     "express": "^4.14.0",
     "modclean": "",
     "nedb": "^1.8.0",
+    "node-uuid": "^1.4.7",
     "promise": "^7.1.1",
     "request": "^2.75.0",
     "ws": "^1.1.1"
