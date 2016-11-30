@@ -12,7 +12,7 @@ module.exports = function () {
   var agentOptions = {};
   
   if(CM_HTTPS_CA_ROOT_CERT === '') {
-    console.log("WARNING:: no https root cert provided not checking https certs.")
+    console.log("WARNING[databox-request]:: no https root cert provided not checking https certs.")
     agentOptions.rejectUnauthorized = false
   } else {
      agentOptions.ca = CM_HTTPS_CA_ROOT_CERT
@@ -29,7 +29,6 @@ module.exports = function () {
       opt.url = url;
       opt.method = 'GET';
       opt.agent = httpsAgent;
-      opt.headers = { "X-Api-Key": ARBITER_TOKEN };
 
       request(opt,function(error, response, body){
           console.log(error, response.statusCode, body)
@@ -50,7 +49,6 @@ module.exports = function () {
       opt.url = url;
       opt.method = 'POST';
       opt.agent = httpsAgent;
-      opt.headers = { "X-Api-Key": ARBITER_TOKEN };
 
       request(opt,function(error, response, body){
           if(error !== null) {
