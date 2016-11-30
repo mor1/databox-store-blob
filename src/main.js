@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var timeseriesRouter = require('./timeseries.js');
 var keyValueRouter = require('./keyvalue.js');
 var actuateRouter = require('./actuate.js');
-var hypercat = require('./hypercat.js');
+var hypercat = require('./lib/hypercat/hypercat.js');
 
 var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
 
@@ -65,7 +65,7 @@ if(credentials.cert === '' || credentials.key === '') {
 //Websocket connection to live stream data
 var WebSocketServer = require('ws').Server;
 app.wss = new WebSocketServer({ server: server });
-app.broadcastDataOverWebSocket = require('./broadcastDataOverWebSocket.js')(app);
+app.broadcastDataOverWebSocket = require('./lib/websockets/broadcastDataOverWebSocket.js')(app);
 
 server.listen(8080,function() {
     console.log("listening on 8080");
