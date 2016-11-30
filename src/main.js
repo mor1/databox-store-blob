@@ -42,25 +42,8 @@ var databoxLogger = require('./lib/log/databox-log-middelware.js')(logsDb);
 app.use(databoxLogger);
 
 
-//Macaroon checker TODO move this into a module?
-app.use(function (req, res, next) {
-    var mac = null
-    if('macaroon' in req.body) {
-      mac = req.body.macaroon;
-      delete req.body.macaroon
-    } else if ('macaroon' in req.query) {
-      mac = req.query.macaroon;
-      delete req.query.macaroon
-    } else {
-      res.status(400).send('Missing macaroon');
-      return
-    }
+//Macaroon checker TODO
 
-    macaroon = macaroons.MacaroonsBuilder.deserialize(mac);
-    req.macaroon = new macaroons.MacaroonsVerifier(macaroon).satisfyExact("target = " + DATABOX_LOCAL_NAME);
-
-    next();
-})
 
 app.get("/status", function(req, res) {
     res.send("active");
