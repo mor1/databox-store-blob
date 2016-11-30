@@ -30,6 +30,7 @@
     "bunyan": "^1.8.5",
     "bunyan-middleware": "^0.5.1",
     "express": "^4.14.0",
+    "macaroons.js": "^0.3.6",
     "modclean": "",
     "nedb": "^1.8.0",
     "node-uuid": "^1.4.7",
