@@ -6,9 +6,12 @@ module.exports = function (app) {
     var connectionsByKey = {};
 
     app.wss.on('connection', function connection(ws) {
-    
-        //TODO Macaroon check 
-    
+
+        // If the client made it this far, tha macaroon has already been verified an made available
+        var macaroon = ws.upgradeReq.macaroon;
+
+        console.log(macaroon.inspect());
+
         ws.on('message', function incoming(message) {
             console.log('received: %s', message);
             //TODO define msg format 

@@ -83,12 +83,9 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		if (!NO_SECURITY)
 			app.use(macaroonVerifier.verifier(secret, DATABOX_LOCAL_NAME));		
 
-	})
-
-	.then((ids) => {
 		//Websocket connection to live stream data
         var WebSocketServer = require('ws').Server;
-        app.wss = new WebSocketServer({ server: server });
+        app.wss = new WebSocketServer({ server: server, verifyClient: macaroonVerifier.wsVerifier(secret, DATABOX_LOCAL_NAME) });
         app.broadcastDataOverWebSocket = require('./lib/websockets/broadcastDataOverWebSocket.js')(app);
 
 		server.listen(8080, function () {
