@@ -5,18 +5,18 @@ module.exports = function () {
   var request = require('request');
   var https = require('https');
 
-  const ARBITER_TOKEN   = process.env.ARBITER_TOKEN
+  const ARBITER_TOKEN   = process.env.ARBITER_TOKEN;
 
   const CM_HTTPS_CA_ROOT_CERT = process.env.CM_HTTPS_CA_ROOT_CERT || '';
   
   var agentOptions = {};
   
   if(CM_HTTPS_CA_ROOT_CERT === '') {
-    console.log("WARNING[databox-request]:: no https root cert provided not checking https certs.")
-    agentOptions.rejectUnauthorized = false
+    console.log("WARNING[databox-request]:: no https root cert provided not checking https certs.");
+    agentOptions.rejectUnauthorized = false;
   } else {
-     agentOptions.ca = CM_HTTPS_CA_ROOT_CERT
-  };
+     agentOptions.ca = CM_HTTPS_CA_ROOT_CERT;
+  }
 
   var httpsAgent = new https.Agent(agentOptions);
 
@@ -31,17 +31,21 @@ module.exports = function () {
       opt.agent = httpsAgent;
 
       request(opt,function(error, response, body){
-          console.log(error, response.statusCode, body)
+
+
           if(error !== null) {
-            reject(error, response, body);
+            reject({error:error, response:response, body:body});
+            return;
           } else if (response.statusCode != 200) {
-            reject(body, response, body);
-          } else {
-            resolve(error, response, body)
-          }
+            reject({error:body, response:response, body:body});
+            return;
+          } 
+          
+          resolve({error:error, response:response, body:body});
+          
         });
     });
-  }
+  };
 
   databoxRequest.post = function (url,options) {
     return new Promise((resolve, reject) => {
@@ -52,16 +56,17 @@ module.exports = function () {
 
       request(opt,function(error, response, body){
           if(error !== null) {
-            reject(error, response, body);
+            reject({error:error, response:response, body:body});
+            return;
           } else if (response.statusCode != 200) {
-            reject(body, response, body);
-          } else {
-            resolve(error, response, body)
-          }
+            reject({error:body, response:response, body:body});
+            return;
+         }  
+         resolve({error:error, response:response, body:body});
         });
     });
-  }
+  };
 
   return databoxRequest;
   
-}
+};
