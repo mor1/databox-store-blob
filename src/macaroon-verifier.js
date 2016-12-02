@@ -1,11 +1,10 @@
 var url = require('url');
-var request = require('./lib/databox-request/databox-request.js')();
+var databoxRequest = require('./lib/databox-request/databox-request.js');
 var basicAuth = require('basic-auth');
 var macaroons = require('macaroons.js');
 var pathToRegexp = require('path-to-regexp');
 
-
-const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080" 
+const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080";
 
 
 /**
@@ -19,22 +18,12 @@ module.exports.getSecretFromArbiter = function(arbiterKey) {
 		}
 
 		// TODO: Could just make it port 80 arbiter-side since permissions don't matter in the container anyway...
-		request.get(DATABOX_ARBITER_ENDPOINT+'/store/secret', {headers: {'X-Api-Key': arbiterKey}})
-		.then((params) => {
-			var error = params.error;
-			var response = params.response;
-			var body = params.body;
-			console.log("TOSH2::", error, body);
+		databoxRequest({uri: DATABOX_ARBITER_ENDPOINT+'/store/secret'}, function (error,response,body){
 			if (error !== null) {
 				reject(error);
 				return;
 			}
-			console.log("BODY:", body);
 			resolve(new Buffer(body, 'base64'));
-		})
-		.catch((error)=>{
-			console.log(error);
-			reject(error);
 		});
 
 	});

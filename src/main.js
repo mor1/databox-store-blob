@@ -5,10 +5,6 @@ var bodyParser = require("body-parser");
 var macaroons = require('macaroons.js');
 var macaroonVerifier = require('./macaroon-verifier.js');
 
-// A request wrapper that inserts the container mangers root cert and
-// arbiter api key into GET and POST requests
-var request = require('./lib/databox-request/databox-request.js')();
-
 const DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
 
 const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080" 
