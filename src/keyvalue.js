@@ -9,7 +9,7 @@ db.ensureIndex({fieldName: 'vendor_id', unique: false});
 // TODO: Consider OOP-ing this whole thing
 
 module.exports.read = function () {
-	var router = Router();
+	var router = Router({mergeParams: true});
 
 	// TODO: .all, see #15
 	router.get('/', (req, res) => {
@@ -36,13 +36,13 @@ module.exports.read = function () {
 };
 
 module.exports.write = function (subscriptionManager) {
-	var router = Router();
+	var router = Router({mergeParams: true});
 
 	// TODO: .all, see #15
 	router.post('/', (req, res) => {
 		var key = req.params.key;
 		var doc = {
-			key,
+			key: key,
 			data: req.body
 		};
 
