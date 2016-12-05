@@ -31,7 +31,7 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		app.use(bodyParser.json());
 		app.use(bodyParser.urlencoded({extended: true}));
 
-		app.get("/status", () => res.send("active"));
+		app.get("/status", (req, res) => res.send("active"));
 
 		var wsVerifier;
 		if (!NO_SECURITY) {
