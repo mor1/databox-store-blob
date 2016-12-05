@@ -102,6 +102,7 @@ module.exports.verifier = function (secret, storeName) {
 			return;
 		}
 
+		req.macaroon = macaroon;
 		next();
 	};
 };
@@ -114,6 +115,7 @@ module.exports.verifier = function (secret, storeName) {
  * @return {Function} WebSocket server client verifier
  */
 module.exports.wsVerifier = function (secret, storeName) {
+	// TODO: See me-box/databox-store-blob issue #19
 	return function (info, callback) {
 		// Extract token as per Hypercat PAS 212 7.1 for uniformity
 		var creds = basicAuth(info);
