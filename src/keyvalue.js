@@ -56,7 +56,7 @@ module.exports.write = function (subscriptionManager) {
 			res.send(affectedDocuments.data);
 		});
 
-		data.path = '/json/' + req.params.sensor;
+		data.path = '/json/' + req.params.key;
 
 		subscriptionManager.emit(data.path, data);
 	});
