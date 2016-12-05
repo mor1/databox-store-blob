@@ -15,6 +15,8 @@ const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https:
 const ARBITER_KEY = process.env.ARBITER_TOKEN;
 const NO_SECURITY = !!process.env.NO_SECURITY;
 
+const PORT = process.env.PORT || 8080;
+
 //HTTPS certs created by the container mangers for this components HTTPS server.
 const HTTPS_CLIENT_CERT = process.env.HTTPS_CLIENT_CERT || '';
 const HTTPS_CLIENT_PRIVATE_KEY = process.env.HTTPS_CLIENT_PRIVATE_KEY || '';
@@ -77,8 +79,8 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		app.use('/sub',   subscriptionManager.sub());
 		app.use('/unsub', subscriptionManager.unsub());
 
-		server.listen(8080, function () {
-			console.log("Listening on port 8080");
+		server.listen(PORT, function () {
+			console.log("Listening on port " + PORT);
 		});
 	})
 	.catch((err) => {
