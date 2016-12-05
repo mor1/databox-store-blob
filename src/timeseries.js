@@ -11,8 +11,7 @@ db.ensureIndex({fieldName: 'vendor_id', unique: false});
 module.exports.read = function () {
 	var router = Router({mergeParams: true});
 
-	// TODO: .all, see #15
-	router.post('/latest', function (req, res, next) {
+	var latest = function (req, res, next) {
 		var sensor_id = req.params.sensor;
 		db.find({ sensor_id: sensor_id }).sort({ timestamp: -1 }).limit(1).exec(function (err, doc) {
 			if (err) {
@@ -22,10 +21,9 @@ module.exports.read = function () {
 			}
 			res.send(doc);
 		});
-	});
+	};
 
-	// TODO: .all, see #15
-	router.post('/since', function (req, res, next) {
+	var since = function (req, res, next) {
 		var sensor_id = req.params.sensor;
 		var timestamp = req.body.timestamp;
 		db.find({ sensor_id, $where: function () { return this.timestamp > timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
@@ -36,10 +34,9 @@ module.exports.read = function () {
 			}
 			res.send(doc);
 		});
-	});
+	};
 
-	// TODO: .all, see #15
-	router.post('/range', function (req, res, next) {
+	var range = function (req, res, next) {
 		var sensor_id = req.params.sensor;
 		var start = req.body.start;
 		var end = req.body.end;
@@ -52,6 +49,19 @@ module.exports.read = function () {
 			}
 			res.send(doc);
 		});
+	};
+
+	router.post('/', function (req, res, next) {
+		var cmd = req.params.cmd;
+		if(cmd == 'latest') {
+			latest(req, res, next);
+		}
+		if(cmd == 'since') {
+			since(req, res, next);
+		}
+		if(cmd == 'range') {
+			range(req, res, next);
+		}
 	});
 
 	return router;

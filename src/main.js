@@ -70,7 +70,7 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 			path: '/ws'
 		}));
 
-		app.use('/read/ts/:sensor',  timeseries.read());
+		app.use('/read/ts/:cmd/:sensor',  timeseries.read());
 		app.use('/write/ts/:sensor', timeseries.write(subscriptionManager));
 
 		app.use('/read/json/:key',   keyvalue.read());
