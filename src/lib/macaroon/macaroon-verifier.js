@@ -1,5 +1,5 @@
 var url = require('url');
-var databoxRequest = require('./lib/databox-request/databox-request.js');
+var databoxRequest = require('../databox-request/databox-request.js');
 var basicAuth = require('basic-auth');
 var macaroons = require('macaroons.js');
 var pathToRegexp = require('path-to-regexp');

@@ -3,6 +3,8 @@ const EventEmitter = require('events');
 // TODO: Singleton vs OOP?
 module.exports = class extends EventEmitter {
 	constructor(wss) {
+		super();
+
 		this.wss = wss;
 		this.clients = {};
 
@@ -24,11 +26,9 @@ module.exports = class extends EventEmitter {
 
 	sub() {
 		return (req, res) => {
+			// NOTE: Don't need to check anyhting here since it's all already covered by the path caveat
 			// TODO: See me-box/databox-store-blob issue #19
 			const id   = req.macaroon.identifier;
-			const path = '/' + req.params[0];
-			// NOTE: Don't need to check anyhting here since it's all already covered by the path caveat
-
 
 			if (!(id in this.clients)) {
 				// TODO: See me-box/databox-store-blob issue #19
@@ -43,10 +43,10 @@ module.exports = class extends EventEmitter {
 				ws.send(JSON.stringify(data));
 			};
 
-			this.on(path, listener);
+			this.on(req.path, listener);
 
 			ws.on('close', () => {
-				this.removeListener(path, listener)l
+				this.removeListener(req.path, listener);
 			});
 
 			res.send();
