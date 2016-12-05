@@ -62,17 +62,17 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 
 		app.use('/logs', databoxLoggerApi(app,logsDb));
 
-		app.use('/read/ts/:sensor',  timeseries.read());
-		app.use('/write/ts/:sensor', timeseries.write(subscriptionManager));
-
-		app.use('/read/json/:key',   keyvalue.read());
-		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
-
 		var subscriptionManager = new SubscriptionManager(new WebSocketServer({
 			server,
 			verifyClient: wsVerifier,
 			path: '/ws'
 		}));
+
+		app.use('/read/ts/:sensor',  timeseries.read());
+		app.use('/write/ts/:sensor', timeseries.write(subscriptionManager));
+
+		app.use('/read/json/:key',   keyvalue.read());
+		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
 
 		app.use('/sub',   subscriptionManager.sub());
 		app.use('/unsub', subscriptionManager.unsub());
