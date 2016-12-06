@@ -17,9 +17,10 @@ module.exports = function (expressApp) {
         var id = req.params.datasourceid;
         var vendor = req.body.vendor;
         var sensortype = req.body.sensor_type;
-        var unit = req.body.unit;
-        var location = req.body.location;
-        var description = req.body.description;
+        var unit = req.body.unit || "";
+        var location = req.body.location || "";
+        var description = req.body.description || "";
+        var isActuator = req.body.isActuator || false;
 
         console.log("Adding data source to the current Hypercat catalogue", id);
 
@@ -48,6 +49,13 @@ module.exports = function (expressApp) {
             ],
             "href": "https://" + DATABOX_LOCAL_NAME + ":" + PORT + "/" + id
         };
+
+        if(isActuator) {
+            item["item-metadata"].push({
+                    "rel": "urn:X-databox:rels:isActuator",
+                    "val": true
+                });
+        }
 
         cat.items.push(item);
 
