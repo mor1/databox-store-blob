@@ -7,7 +7,7 @@ var PORT = process.env.DATABOX_PORT || 8080;
 
 module.exports = function (expressApp) {
 
-    var router = require('express').Router();
+    var router = require('express').Router({mergeParams: true});
 
     var app = expressApp;
     
