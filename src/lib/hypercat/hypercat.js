@@ -46,7 +46,7 @@ module.exports = function (expressApp) {
                     "val": location
                 },
             ],
-            "href": "http://" + DATABOX_LOCAL_NAME + ":" + PORT + "/" + id
+            "href": "https://" + DATABOX_LOCAL_NAME + ":" + PORT + "/" + id
         };
 
         cat.items.push(item);
