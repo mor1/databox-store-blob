@@ -3,8 +3,7 @@ const Datastore = require('nedb');
 
 var db = new Datastore({filename: '../database/datastoreKV.db', autoload: true});
 db.ensureIndex({fieldName: 'key', unique: true});
-db.ensureIndex({fieldName: 'sensor_id', unique: false});
-db.ensureIndex({fieldName: 'vendor_id', unique: false});
+db.ensureIndex({fieldName: 'datasource_id', unique: false});
 
 // TODO: Consider OOP-ing this whole thing
 
@@ -45,7 +44,6 @@ module.exports.write = function (subscriptionManager) {
 			key: key,
 			data: req.body
 		};
-
 		db.update({ key }, doc, { upsert: true, returnUpdatedDocs: true }, function (err, numAffected, affectedDocuments, upsert) {
 			if (err) {
 				console.log("[Error]::", req.originalUrl, doc, err);
