@@ -1,51 +1,65 @@
+const Router = require('express').Router;
+const Datastore = require('nedb');
 
-module.exports = function (expressApp) {
-    
-    var Datastore = require('nedb');
-    var db = new Datastore({filename: '../database/datastoreKV.db', autoload: true});
-    db.ensureIndex({fieldName: 'key', unique: true});
-    db.ensureIndex({fieldName: 'sensor_id', unique: false});
-    db.ensureIndex({fieldName: 'vendor_id', unique: false});
+var db = new Datastore({filename: '../database/datastoreKV.db', autoload: true});
+db.ensureIndex({fieldName: 'key', unique: true});
+db.ensureIndex({fieldName: 'sensor_id', unique: false});
+db.ensureIndex({fieldName: 'vendor_id', unique: false});
 
-    var router = require('express').Router();
+// TODO: Consider OOP-ing this whole thing
 
-    var app = expressApp;
+module.exports.read = function () {
+	var router = Router({mergeParams: true});
 
-    router.post("/:key", function(req, res, next) {
-        
-        var key = req.params.key;
-        var doc = {
-                    key:key,
-                    data:req.body
-                  };
+	// TODO: .all, see #15
+	router.get('/', (req, res) => {
+		var key = req.params.key;
 
-        db.update({ key:key }, doc, { upsert: true, returnUpdatedDocs: true }, function (err, numAffected, affectedDocuments, upsert) {
-            if (err) {
-                console.log("[Error]:: POST /" + key, doc, err);
-                res.status(500).send({status:500,error:err});
-            }
-            res.send(affectedDocuments.data);
-        });
+		db.findOne({ key }, function (err, document) {
+			if (err) {
+				console.log("[Error]::", req.originalUrl);
+				// TODO: Document
+				res.status(500).send({ status: 500, error: err });
+				return;
+			}
 
-        app.broadcastDataOverWebSocket(key,req.body,'kv');
+			if(document == null) {
+				res.status(404).send({ status: 404, error: 'Document not found' });
+				return;
+			}
 
-    });
+			res.send(document.data);
+		});
+	});
 
-    router.get('/:key', function(req, res, next) {
-        var key = req.params.key;
-        db.findOne({key: key}, function (err, document) {
-          if (err) {
-            console.log("[Error]:: /key/" + key);
-            res.status(500).send({status:500,error:err});
-          }
+	return router;
+};
 
-          if(document == null) {
-            res.status(404).send({status:404,error:"Document not found."});
-          } else {
-            res.send(document.data);
-          }
-        });
-    });
+module.exports.write = function (subscriptionManager) {
+	var router = Router({mergeParams: true});
 
-   return router;
-} 
+	// TODO: .all, see #15
+	router.post('/', (req, res) => {
+		var key = req.params.key;
+		var doc = {
+			key: key,
+			data: req.body
+		};
+
+		db.update({ key }, doc, { upsert: true, returnUpdatedDocs: true }, function (err, numAffected, affectedDocuments, upsert) {
+			if (err) {
+				console.log("[Error]::", req.originalUrl, doc, err);
+				// TODO: Document
+				res.status(500).send({ status: 500, error: err });
+				return;
+			}
+			res.send(affectedDocuments.data);
+		});
+
+		data.path = '/json/' + key;
+
+		subscriptionManager.emit(data.path, data);
+	});
+
+	return router;
+};
