@@ -7,8 +7,6 @@ describe('Add and retrieve latest TS values', function() {
 	it("Adds records posted to /write/ts", function(done) {
 		var data = {
 	    	"data": 42,
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -22,8 +20,6 @@ describe('Add and retrieve latest TS values', function() {
 
 	it("retrieves latest records with /read/ts/latest", function(done) {
 		var data = {
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/read/ts/latest/"+11)

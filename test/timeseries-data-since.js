@@ -9,16 +9,12 @@ var recordSet = []; // store res from can POST /data/since to test /data/range
 describe('tests /read/ts/since', function() {
 	var data = {
 	    	"data": {new:"data", since:"world"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 	var lastRecord = {};
 	
 	it("Adds records posted to /write/ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -50,8 +46,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -66,8 +60,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts/", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world0"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -82,8 +74,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts/", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world1"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -98,8 +88,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts/", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world2"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -114,8 +102,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts/", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world3"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -130,8 +116,6 @@ describe('tests /read/ts/since', function() {
 	it("Adds records posted to /write/ts/", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world4"},
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 		}; 
 		supertest
 			.post("/write/ts/"+11)
@@ -147,7 +131,6 @@ describe('tests /read/ts/since', function() {
 		
 		data = {
 					"timestamp": lastRecord.timestamp,
-					"sensor_id": 11
 				};
 
 		supertest
@@ -174,8 +157,6 @@ describe('tests /read/ts/range', function() {
 			var data = {
 	    	"start": recordSet[1].timestamp,
 	    	"end": recordSet[4].timestamp,
-	    	"sensor_id": 11,
-	    	"vendor_id": 1
 			}; 
 
 			supertest
