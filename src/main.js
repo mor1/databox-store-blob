@@ -1,13 +1,21 @@
+const https = require('https');
+const express = require("express");
+const bodyParser = require("body-parser");
+const WebSocketServer = require('ws').Server;
 
-var https = require('https');
-var express = require("express");
-var bodyParser = require("body-parser");
-var macaroons = require('macaroons.js');
-var macaroonVerifier = require('./macaroon-verifier.js');
+const hypercat = require('./lib/hypercat/hypercat.js');
+const macaroonVerifier = require('./lib/macaroon/macaroon-verifier.js');
+const SubscriptionManager = require('./lib/subscription/subscriptionManager.js');
+const timeseries = require('./timeseries.js');
+const keyvalue   = require('./keyvalue.js');
 
 const DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
-
 const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080" 
+// TODO: Refactor token to key here and in CM to avoid confusion with bearer tokens
+const ARBITER_KEY = process.env.ARBITER_TOKEN;
+const NO_SECURITY = !!process.env.NO_SECURITY;
+
+const PORT = process.env.PORT || 8080;
 
 //HTTPS certs created by the container mangers for this components HTTPS server.
 const HTTPS_CLIENT_CERT = process.env.HTTPS_CLIENT_CERT || '';
@@ -17,35 +25,22 @@ const credentials = {
 	cert: HTTPS_CLIENT_CERT,
 };
 
-
-// TODO: Refactor token to key here and in CM to avoid confusion with bearer tokens
-var ARBITER_KEY = process.env.ARBITER_TOKEN;
-var NO_SECURITY = !!process.env.NO_SECURITY;
-
-//ENDPOINTs
-var timeseriesRouter = require('./timeseries.js');
-var keyValueRouter = require('./keyvalue.js');
-var actuateRouter = require('./actuate.js');
-var hypercat = require('./lib/hypercat/hypercat.js');
-
-var app = express();
-
-
+const app = express();
 
 //Register with arbiter and get secret
 macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
-
 	.then((secret) => {
-		// TODO: Clean up
-
-		
 		app.use(bodyParser.json());
 		app.use(bodyParser.urlencoded({extended: true}));
-		
-		
-		if (!NO_SECURITY)
+
+		app.get("/status", (req, res) => res.send("active"));
+
+		var wsVerifier;
+		if (!NO_SECURITY) {
 			//everything after here will require a valid macaroon
-			app.use(macaroonVerifier.verifier(secret, DATABOX_LOCAL_NAME));		
+			app.use(macaroonVerifier.verifier(secret, DATABOX_LOCAL_NAME));
+			wsVerifier = macaroonVerifier.wsVerifier(secret, DATABOX_LOCAL_NAME);
+		}
 
 		/*
 		* DATABOX API Logging
@@ -65,35 +60,29 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 			server = https.createServer(credentials,app);
 		}
 
-		app.get("/status", function(req, res) {
-			res.send("active");
+		app.use('/cat', hypercat(app));
 
+		app.use('/logs', databoxLoggerApi(app,logsDb));
+
+		var subscriptionManager = new SubscriptionManager(new WebSocketServer({
+			server,
+			verifyClient: wsVerifier,
+			path: '/ws'
+		}));
+
+		app.use('/read/ts/:cmd/:sensor',  timeseries.read());
+		app.use('/write/ts/:sensor', timeseries.write(subscriptionManager));
+
+		app.use('/read/json/:key',   keyvalue.read());
+		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
+
+		app.use('/sub',   subscriptionManager.sub());
+		app.use('/unsub', subscriptionManager.unsub());
+
+		server.listen(PORT, function () {
+			console.log("Listening on port " + PORT);
 		});
-
-		app.get("/api/status", function(req, res) {
-			res.send("active");
-		});
-
-		app.use('/api/cat',hypercat(app));
-
-		app.use('/logs',databoxLoggerApi(app,logsDb));
-
-		app.use('/api/actuate',actuateRouter(app));
-
-		app.use('/:var(api/data|api/ts)?',timeseriesRouter(app));
-
-		app.use('/api/key',keyValueRouter(app));
-
-		//Websocket connection to live stream data
-        var WebSocketServer = require('ws').Server;
-        app.wss = new WebSocketServer({ server: server, verifyClient: macaroonVerifier.wsVerifier(secret, DATABOX_LOCAL_NAME) });
-        app.broadcastDataOverWebSocket = require('./lib/websockets/broadcastDataOverWebSocket.js')(app);
-
-		server.listen(8080, function () {
-            console.log("listening on port 8080");
-        });
 	})
-
 	.catch((err) => {
 		console.log(err);
 	});
