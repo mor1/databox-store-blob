@@ -96,7 +96,7 @@ This is beta. Expect bugs but the API should be reasonably stable.
 
     npm install && npm start
 
-#Devloping
+#Developing
 
 Start the container manger in developer mode:
 
