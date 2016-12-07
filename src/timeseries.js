@@ -2,9 +2,8 @@ const Router = require('express').Router;
 const Datastore = require('nedb');
 
 const db = new Datastore({filename: '../database/datastore.db', autoload: true});
-db.ensureIndex({fieldName: 'sensor_id', unique: false});
+db.ensureIndex({fieldName: 'datasource_id', unique: false});
 db.ensureIndex({fieldName: 'timestamp', unique: false});
-db.ensureIndex({fieldName: 'vendor_id', unique: false});
 
 // TODO: Consider OOP-ing this whole thing
 
@@ -12,8 +11,8 @@ module.exports.read = function () {
 	var router = Router({mergeParams: true});
 
 	var latest = function (req, res, next) {
-		var sensor_id = req.params.sensor;
-		db.find({ sensor_id: sensor_id }).sort({ timestamp: -1 }).limit(1).exec(function (err, doc) {
+		var datasource_id = req.params.datasourceid;
+		db.find({ datasource_id: datasource_id }).sort({ timestamp: -1 }).limit(1).exec(function (err, doc) {
 			if (err) {
 				console.log('[Error]::', req.originalUrl);
 				// TODO: Status code + document
@@ -24,9 +23,9 @@ module.exports.read = function () {
 	};
 
 	var since = function (req, res, next) {
-		var sensor_id = req.params.sensor;
+		var datasource_id = req.params.datasourceid;
 		var timestamp = req.body.timestamp;
-		db.find({ sensor_id, $where: function () { return this.timestamp > timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
+		db.find({ datasource_id, $where: function () { return this.timestamp > timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
 				console.log('[Error]::', req.originalUrl, timestamp);
 				// TODO: Status code + document
@@ -37,11 +36,11 @@ module.exports.read = function () {
 	};
 
 	var range = function (req, res, next) {
-		var sensor_id = req.params.sensor;
+		var datasource_id = req.params.datasourceid;
 		var start = req.body.start;
 		var end = req.body.end;
 
-		db.find({ sensor_id, $where: function () { return this.timestamp >= start && this.timestamp <= end; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
+		db.find({ datasource_id, $where: function () { return this.timestamp >= start && this.timestamp <= end; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
 				console.log('[Error]::', req.originalUrl, timestamp);
 				// TODO: Status code + document
@@ -73,9 +72,8 @@ module.exports.write = function (subscriptionManager) {
 	// TODO: .all, see #15
 	router.post('/', function (req, res, next) {
 		var data = {
-			'data':      req.body.data,
-			'sensor_id': req.params.sensor,
-			'vendor_id': req.params.vendor_id,
+			datasource_id: req.params.datasourceid,
+			'data': req.body.data,
 			'timestamp': Date.now()
 		};
 
