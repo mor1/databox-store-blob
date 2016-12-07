@@ -26,13 +26,16 @@
   },
   "homepage": "https://github.com/Toshbrown/databox-store-blob#readme",
   "dependencies": {
+    "basic-auth": "^1.1.0",
     "body-parser": "^1.15.2",
     "bunyan": "^1.8.5",
     "bunyan-middleware": "^0.5.1",
     "express": "^4.14.0",
+    "macaroons.js": "^0.3.6",
     "modclean": "",
     "nedb": "^1.8.0",
     "node-uuid": "^1.4.7",
+    "path-to-regexp": "^1.7.0",
     "promise": "^7.1.1",
     "request": "^2.75.0",
     "ws": "^1.1.1"
