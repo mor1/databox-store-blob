@@ -70,8 +70,8 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 			path: '/ws'
 		}));
 
-		app.use('/read/ts/:cmd/:datasourceid',  timeseries.read());
-		app.use('/write/ts/:datasourceid', timeseries.write(subscriptionManager));
+		app.use('/read/ts/:datasourceid/:cmd', timeseries.read());
+		app.use('/write/ts/:datasourceid',     timeseries.write(subscriptionManager));
 
 		app.use('/read/json/:key',   keyvalue.read());
 		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
