@@ -22,7 +22,7 @@ describe('Add and retrieve latest TS values', function() {
 		var data = {
 		}; 
 		supertest
-			.post("/read/ts/latest/"+11)
+			.post("/read/ts/"+11+'/latest')
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
