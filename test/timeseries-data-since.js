@@ -28,7 +28,7 @@ describe('tests /read/ts/since', function() {
 
 	it('can get lastRecord',function(done){
 		supertest
-				.post("/read/ts/latest/"+11)
+				.post("/read/ts/"+11+'/latest')
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -134,7 +134,7 @@ describe('tests /read/ts/since', function() {
 				};
 
 		supertest
-				.post("/read/ts/since/"+11)
+				.post("/read/ts/"+11+'/since')
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -160,7 +160,7 @@ describe('tests /read/ts/range', function() {
 			}; 
 
 			supertest
-					.post("/read/ts/range/"+11)
+					.post("/read/ts/"+11+'/range')
 					.send(data)
 					.expect(200)
 					.end(function(err,result){
