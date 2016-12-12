@@ -10,27 +10,27 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 #Read API 
 
 ###Time series data   
-    Method: POST
     URL: /read/ts/<datasourceid>/latest
+    Method: POST
     Parameters: <datasourceid> the datasourceid to get data for.
     Notes: will return the latest data based on the datasourceid 
     
-    Method: POST
     URL: /read/ts/<datasourceid>/since
+    Method: POST
     Parameters: <datasourceid> the datasourceid to get data for.
     Post data: Raw JSON body containing elements as follows {timestamp: <timestamp in ms>}
     Notes: will return the all data since the provided timestamp for the databox wide sensor_id
     
-    Method: POST
     URL: /read/ts/<datasourceid>/range
+    Method: POST
     Parameters: <datasourceid> the datasourceid to get data for.
     Post data:  Raw JSON body containing elements as follows {start: <start timestamp>, end: <end timestamp>}
     Notes: will return the all data since the provided timestamp for the databox wide sensor_id
     
 ###Key value pairs
 
-    Method: GET
     URL: /read/key/<key>
+    Method: GET
     Parameters: replace <key> with document key 
     Notes: will return the data stored with that key. Returns an empty array 404 {status:404,error:"Document not found."} if no data is stored
 
@@ -40,37 +40,37 @@ Connect to a websocket client to port 8080. Then subscribe for data using:
 
     For time serries:  
 
-    Method: GET
     URL: /sub/ts/<datasourceid>
+    Method: GET
     Parameters: replace <datasourceid> with datasourceid 
     Notes: Will broadcast over the websocket the data stored by datasourceid when data is added. 
 
     
     For key value:  
 
-    Method: GET
     URL: /sub/key/<key>
+    Method: GET
     Parameters: replace <key> with document key 
     Notes:  Will broadcast over the websocket the data stored with that key when it is add or updated. 
 
 #Write API
 
 ###Managing the data source catalog
-    Method: POST
     URL: /cat/add/<datasourceid> 
+    Method: POST
     Parameters: Raw JSON body containing elements as follows {vendor: <vendor name>, unit: <measurement unit>, location: <datasource location>, description:<human readable description>}
     Notes: This data is used to populate the Items in the Hypercat catalog. The datasourceid is managed by the driver and must be unique to this store. 
     
 ###Time series data
-    Method: POST
     URL: /write/ts/<datasourceid>
+    Method: POST
     Parameters: Raw JSON body containing elements as follows {data: <json blob to store>}
     Notes: Stores a value a timestamp is added on insertion
     
 ###Key value pairs
 
-    Method: POST
     URL: /write/key/<key>
+    Method: POST
     Parameters: Raw JSON body containing elements as follows {<data to be stored in JSON format>}
     Notes: will insert if the <key> is not in the database and update the document if it is.
 
@@ -83,11 +83,65 @@ Not available for writing
 
 ###The data source catalog
 
-    Method: GET
     URL: /cat
+    Method: GET
     Parameters: none
-    Notes: will return the latest data source cataloge in Hypercat format. 
-    
+    Notes: will return the latest data source catalog in Hypercat format. 
+
+###Datastore audit log
+
+All action performed by a datastore are logged the Container manger UI can query these using the following endpoints:   
+
+    URL: /logs/read
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the reads performed on the datastore.
+
+    URL: /logs/write
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the writes performed on the datastore.
+
+    URL: /logs/read/ts
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the reads performed on the time series datastore.
+
+    URL: /logs/write/ts
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the writes performed on the time series datastore.
+
+    URL: /logs/read/ts/<datasourceid>
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the reads performed on the time series datastore for datasourceid.
+
+    URL: /logs/write/ts/<datasourceid>
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the writes performed on the time series datastore for datasourceid.
+
+    URL: /logs/read/key
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the reads performed on the key value datastore.
+
+    URL: /logs/write/key
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the writes performed on the key value datastore.
+
+    URL: /logs/read/key/<datasourceid>
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the reads performed on the key value datastore for datasourceid.
+
+    URL: /logs/write/key/<datasourceid>
+    Method: GET 
+    Parameters: none
+    Notes: will return an array of all the writes performed on the key value datastore for datasourceid.
+
 #Status
 
 This is beta. Expect bugs but the API should be reasonably stable.
