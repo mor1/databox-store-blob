@@ -84,7 +84,7 @@ module.exports = function (expressApp, databox_local_name, databox_local_port) {
 
 			// PAS 5.4.3
 			// NOTE: PAS ambiguous about this in several ways
-			res.header('Location', 'https://' + databox_local_name + ':' + PORT);
+			res.location('https://' + databox_local_name + ':' + databox_local_port);
 			res.status(200).send();
 			return;
 		}
@@ -93,7 +93,7 @@ module.exports = function (expressApp, databox_local_name, databox_local_port) {
 		cat.items.push(item);
 
 		// PAS 5.4.2
-		res.header('Location', 'https://' + databox_local_name + ':' + PORT);
+		res.location('https://' + databox_local_name + ':' + databox_local_port);
 		res.status(201).send();
 	});
 

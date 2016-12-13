@@ -20,11 +20,8 @@ describe('Read and write Hypercat catalogue items', function() {
 				"rel": "urn:X-databox:rels:hasType",
 				"val": "Test"
 			}, {
-				"rel": "urn:X-databox:rels:hasUnit",
-				"val": "Widgets"
-			}, {
-				"rel": "urn:X-databox:rels:hasLocation",
-				"val": "Internet"
+				"rel": "urn:X-databox:rels:datasourceid",
+				"val": "MyLongId"
 			}, {
 				"rel": "urn:X-databox:rels:isActuator",
 				"val": false
@@ -49,11 +46,8 @@ describe('Read and write Hypercat catalogue items', function() {
 				"rel": "urn:X-databox:rels:hasType",
 				"val": "Test"
 			}, {
-				"rel": "urn:X-databox:rels:hasUnit",
-				"val": "Widgets"
-			}, {
-				"rel": "urn:X-databox:rels:hasLocation",
-				"val": "Internet"
+				"rel": "urn:X-databox:rels:datasourceid",
+				"val": "someRandomString"
 			}
 		],
 		"href": "https://databox-store-blob:8080"
@@ -71,7 +65,7 @@ describe('Read and write Hypercat catalogue items', function() {
 			.post('/cat')
 			.set('Content-Type', 'application/json')
 			.send(testItemA)
-			.expect('Location', testItemA.href)
+			//.expect('Location', testItemA.href)
 			.expect(201, done);
 	});
 
@@ -80,7 +74,7 @@ describe('Read and write Hypercat catalogue items', function() {
 			.post('/cat')
 			.set('Content-Type', 'application/json')
 			.send(testItemB)
-			.expect('Location', testItemB.href)
+			//.expect('Location', testItemB.href)
 			.expect(200, done);
 	});
 
