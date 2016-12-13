@@ -9,11 +9,15 @@ var hrefMap = {};
 
 // TODO: Do we actually want to force Databox rels despite PAS? Could come later?
 var requiredRels = [
-	'urn:X-databox:rels:hasVendor',
-	'urn:X-databox:rels:hasType',
-	'urn:X-databox:rels:hasUnit',
-	'urn:X-databox:rels:hasLocation'
-	//'urn:X-databox:rels:isActuator'
+	'urn:X-databox:rels:hasVendor', //needed for searching for sensors by manufacture 
+	'urn:X-databox:rels:hasType',  //needed to find sensors of a particular type
+	'urn:X-databox:rels:datasourceid' //needed as its is used to refer to the datasource in API requests  
+	//'urn:X-databox:rels:hasUnit', //optional
+	//'urn:X-databox:rels:hasLocation', //optional
+	//'urn:X-databox:rels:isActuator' //optional
+	//
+	// Drivers are also free to add any other metadata they see fit
+	//
 ];
 
 /**
