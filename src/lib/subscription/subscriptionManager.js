@@ -43,6 +43,7 @@ module.exports = class extends EventEmitter {
 			var listener = (data) => {
 				// TODO: Error handling
 				ws.send(JSON.stringify(data));
+				//TODO: Logging 
 			};
 
 			this.on(req.path, listener);
