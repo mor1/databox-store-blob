@@ -46,8 +46,12 @@ module.exports = function (expressApp) {
                     "rel": "urn:X-databox:rels:location",
                     "val": location
                 },
+                {
+                    "rel": "urn:X-databox:rels:datasourceid",
+                    "val": id
+                },
             ],
-            "href": "https://" + DATABOX_LOCAL_NAME + ":" + PORT + "/" + id
+            "href": "https://" + DATABOX_LOCAL_NAME + ":" + PORT + "/" 
         };
 
         if(isActuator) {
