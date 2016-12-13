@@ -1,9 +1,6 @@
 var request = require('request');
 var cat = require('./base-cat.json');
 
-var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
-var PORT = process.env.DATABOX_PORT || 8080;
-
 // To avoid O(N) search if scaling to a zillion stores
 var hrefMap = {};
 
@@ -58,7 +55,7 @@ var isValidItem = function (item) {
 	return hasDescription && hasContentType && !required.length;
 }
 
-module.exports = function (expressApp) {
+module.exports = function (expressApp, databox_local_name, databox_local_port) {
 
 	var router = require('express').Router({mergeParams: true});
 
@@ -87,7 +84,7 @@ module.exports = function (expressApp) {
 
 			// PAS 5.4.3
 			// NOTE: PAS ambiguous about this in several ways
-			res.header('Location', 'https://' + DATABOX_LOCAL_NAME + ':' + PORT);
+			res.header('Location', 'https://' + databox_local_name + ':' + PORT);
 			res.status(200).send();
 			return;
 		}
@@ -96,7 +93,7 @@ module.exports = function (expressApp) {
 		cat.items.push(item);
 
 		// PAS 5.4.2
-		res.header('Location', 'https://' + DATABOX_LOCAL_NAME + ':' + PORT);
+		res.header('Location', 'https://' + databox_local_name + ':' + PORT);
 		res.status(201).send();
 	});
 

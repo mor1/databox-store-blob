@@ -10,7 +10,9 @@ const timeseries = require('./timeseries.js');
 const keyvalue   = require('./keyvalue.js');
 
 const DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
-const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080" 
+const DATABOX_LOCAL_PORT = process.env.DATABOX_LOCAL_PORT || 8080;
+const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080";
+
 // TODO: Refactor token to key here and in CM to avoid confusion with bearer tokens
 const ARBITER_KEY = process.env.ARBITER_TOKEN;
 const NO_SECURITY = !!process.env.NO_SECURITY;
@@ -60,7 +62,7 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 			server = https.createServer(credentials,app);
 		}
 
-		app.use('/cat', hypercat(app));
+		app.use('/cat', hypercat(app, DATABOX_LOCAL_NAME, DATABOX_LOCAL_PORT));
 
 		app.use('/logs', databoxLoggerApi(app,logsDb));
 
