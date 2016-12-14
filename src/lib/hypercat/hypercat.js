@@ -8,7 +8,8 @@ var hrefMap = {};
 var requiredRels = [
 	'urn:X-databox:rels:hasVendor', //needed for searching for sensors by manufacture 
 	'urn:X-databox:rels:hasType',  //needed to find sensors of a particular type
-	'urn:X-databox:rels:datasourceid' //needed as its is used to refer to the datasource in API requests  
+	'urn:X-databox:rels:hasDatasourceid', //needed as its is used to refer to the datasource in API requests  
+	'urn:X-databox:rels:hasStoreType' //needed to help apps know which Store API the store offers  
 	//'urn:X-databox:rels:hasUnit', //optional
 	//'urn:X-databox:rels:hasLocation', //optional
 	//'urn:X-databox:rels:isActuator' //optional
@@ -21,8 +22,7 @@ var requiredRels = [
  * @return {Boolean} isValid
  */
 var isValidItem = function (item) {
-	if (!('item-metadata' in item &&
-				'href'          in item))
+	if (!('item-metadata' in item && 'href' in item))
 		return false;
 
 	// Hypercat minimum

@@ -20,11 +20,14 @@ describe('Read and write Hypercat catalogue items', function() {
 				"rel": "urn:X-databox:rels:hasType",
 				"val": "Test"
 			}, {
-				"rel": "urn:X-databox:rels:datasourceid",
+				"rel": "urn:X-databox:rels:hasDatasourceid",
 				"val": "MyLongId"
 			}, {
 				"rel": "urn:X-databox:rels:isActuator",
 				"val": false
+			}, {
+				"rel": "urn:X-databox:rels:hasStoreType",
+				"val": "databox-store-blob"
 			}
 		],
 		"href": "https://databox-store-blob:8080"
@@ -46,8 +49,11 @@ describe('Read and write Hypercat catalogue items', function() {
 				"rel": "urn:X-databox:rels:hasType",
 				"val": "Test"
 			}, {
-				"rel": "urn:X-databox:rels:datasourceid",
+				"rel": "urn:X-databox:rels:hasDatasourceid",
 				"val": "someRandomString"
+			}, {
+				"rel": "urn:X-databox:rels:hasStoreType",
+				"val": "databox-store-blob"
 			}
 		],
 		"href": "https://databox-store-blob:8080"
