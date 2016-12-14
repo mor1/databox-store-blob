@@ -65,7 +65,7 @@ describe('Read and write Hypercat catalogue items', function() {
 			.post('/cat')
 			.set('Content-Type', 'application/json')
 			.send(testItemA)
-			//.expect('Location', testItemA.href)
+			.expect('Location', testItemA.href)
 			.expect(201, done);
 	});
 
@@ -74,7 +74,7 @@ describe('Read and write Hypercat catalogue items', function() {
 			.post('/cat')
 			.set('Content-Type', 'application/json')
 			.send(testItemB)
-			//.expect('Location', testItemB.href)
+			.expect('Location', testItemB.href)
 			.expect(200, done);
 	});
 
