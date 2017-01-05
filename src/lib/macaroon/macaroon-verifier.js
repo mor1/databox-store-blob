@@ -31,21 +31,31 @@ module.exports.getSecretFromArbiter = function(arbiterKey) {
 
 
 /**
- * Checks validity of the macaroon "path" caveat
- * @param {String} path
+ * Checks if a method and path satisfies a macaroon "routes" caveat
  * @param {String} caveat
+ * @param {String} method
+ * @param {String} path
  * @return {Boolean} valid
  */
 var isPathValid = function () {
-	var prefixRegex = /path = .*/;
-	var prefixLen   = 'path = '.length;
+	var prefixRegex = /routes = .*/;
+	var prefixLen   = 'routes = '.length;
 
-	return function (caveat, path) {
+	return function (caveat, method, path) {
 		if (!prefixRegex.test(caveat))
 			return false;
 
 		// TODO: Catch potential JSON.parse exception
-		return pathToRegexp(JSON.parse(caveat.substring(prefixLen).trim())).test(path);
+		var routes = JSON.parse(caveat.substring(prefixLen));
+		var whitelist = routes[method];
+
+		if (!whitelist)
+			return false;
+
+		// TODO: Catch potential JSON.parse exception
+		whitelist = JSON.parse(whitelist);
+
+		return pathToRegexp(whitelist).test(path);
 	}
 }();
 
@@ -54,9 +64,9 @@ var isPathValid = function () {
  * @param {String} path
  * @return {Function} Path verifier
  */
-var createPathVerifier = function (path) {
+var createPathVerifier = function (method, path) {
 	return function (caveat) {
-		return isPathValid(caveat, path);
+		return isPathValid(caveat, method, path);
 	};
 };
 
@@ -93,7 +103,7 @@ module.exports.verifier = function (secret, storeName) {
 		// Verify "target" caveat
 		macaroon.satisfyExact("target = " + storeName);
 
-		macaroon.satisfyGeneral(createPathVerifier(req.path));
+		macaroon.satisfyGeneral(createPathVerifier(req.method, req.path));
 
 		// TODO: Verify granularity etc here (or potentially in tandem with driver)?
 
