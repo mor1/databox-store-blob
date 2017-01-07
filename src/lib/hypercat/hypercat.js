@@ -64,8 +64,6 @@ module.exports = function (expressApp, databox_local_name, databox_local_port) {
 	// Add a data source to the current Hypercat catalogue
 	// Content-Type: application/json
 	router.post('/', function (req, res, next) {
-		// TODO: Extra auth to differentiate between GET and POST /cat
-
 		const item = req.body;
 
 		if (!isValidItem(item)) {
