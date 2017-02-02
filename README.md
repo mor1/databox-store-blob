@@ -88,60 +88,6 @@ Not available for writing
     Parameters: none
     Notes: will return the latest data source catalog in Hypercat format. 
 
-###Datastore audit log
-
-All action performed by a datastore are logged the Container manger UI can query these using the following endpoints:   
-
-    URL: /logs/read
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the reads performed on the datastore.
-
-    URL: /logs/write
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the writes performed on the datastore.
-
-    URL: /logs/read/ts
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the reads performed on the time series datastore.
-
-    URL: /logs/write/ts
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the writes performed on the time series datastore.
-
-    URL: /logs/read/ts/<datasourceid>
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the reads performed on the time series datastore for datasourceid.
-
-    URL: /logs/write/ts/<datasourceid>
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the writes performed on the time series datastore for datasourceid.
-
-    URL: /logs/read/key
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the reads performed on the key value datastore.
-
-    URL: /logs/write/key
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the writes performed on the key value datastore.
-
-    URL: /logs/read/key/<datasourceid>
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the reads performed on the key value datastore for datasourceid.
-
-    URL: /logs/write/key/<datasourceid>
-    Method: GET 
-    Parameters: none
-    Notes: will return an array of all the writes performed on the key value datastore for datasourceid.
-
 #Status
 
 This is beta. Expect bugs but the API should be reasonably stable.

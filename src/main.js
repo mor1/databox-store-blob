@@ -48,9 +48,8 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		* DATABOX API Logging
 		* Logs all requests and responses to/from the API in bunyan format in nedb
 		*/
-		var logsDb = require('./lib/log/databox-log-db.js')('../database/datastoreLOG.db');
-		var databoxLoggerApi = require('./lib/log/databox-log-api.js');
-		var databoxLogger = require('./lib/log/databox-log-middelware.js')(logsDb);
+		
+		var databoxLogger = require('./lib/log/databox-log-middelware.js')();
 		app.use(databoxLogger);
 
 		var server = null;
@@ -63,8 +62,6 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		}
 
 		app.use('/cat', hypercat(app, DATABOX_LOCAL_NAME, DATABOX_LOCAL_PORT));
-
-		app.use('/logs', databoxLoggerApi(app,logsDb));
 
 		var subscriptionManager = new SubscriptionManager(new WebSocketServer({
 			server,
