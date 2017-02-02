@@ -1,16 +1,16 @@
 
 /*
 * DATABOX API Logging
-* Logs all requests and responses to the API in bunyan format in nedb
+* Logs all requests and responses to the API in bunyan format to the log store
 */
 
-module.exports = function(database) {
+module.exports = function() {
     
 
     var uuid = require('node-uuid');
     var bunyan = require('bunyan');
     var bunyanMiddleware = require('bunyan-middleware');
-    var logStream = require('./log-nedb-stream.js')({},database);
+    var logStream = require('./log-databox-stream.js')({});
     var logger = bunyan.createLogger({
         name: 'databoxLogger',
         streams: [

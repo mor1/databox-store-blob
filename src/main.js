@@ -1,73 +1,90 @@
+const https = require('https');
+const express = require("express");
+const bodyParser = require("body-parser");
+const WebSocketServer = require('ws').Server;
 
-var https = require('https');
-var express = require("express");
-var bodyParser = require("body-parser");
+const hypercat = require('./lib/hypercat/hypercat.js');
+const macaroonVerifier = require('./lib/macaroon/macaroon-verifier.js');
+const SubscriptionManager = require('./lib/subscription/subscriptionManager.js');
+const timeseries = require('./timeseries.js');
+const keyvalue   = require('./keyvalue.js');
 
-var timeseriesRouter = require('./timeseries.js');
-var keyValueRouter = require('./keyvalue.js');
-var actuateRouter = require('./actuate.js');
-var hypercat = require('./lib/hypercat/hypercat.js');
+const DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
+const DATABOX_LOCAL_PORT = process.env.DATABOX_LOCAL_PORT || 8080;
+const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https://databox-arbiter:8080";
 
-var DATABOX_LOCAL_NAME = process.env.DATABOX_LOCAL_NAME || "databox-store-blob";
+// TODO: Refactor token to key here and in CM to avoid confusion with bearer tokens
+const ARBITER_KEY = process.env.ARBITER_TOKEN;
+const NO_SECURITY = !!process.env.NO_SECURITY;
 
-var HTTPS_CLIENT_CERT = process.env.HTTPS_CLIENT_CERT || '';
-var HTTPS_CLIENT_PRIVATE_KEY = process.env.HTTPS_CLIENT_PRIVATE_KEY || '';
-var credentials = {
+const PORT = process.env.PORT || 8080;
+
+//HTTPS certs created by the container mangers for this components HTTPS server.
+const HTTPS_CLIENT_CERT = process.env.HTTPS_CLIENT_CERT || '';
+const HTTPS_CLIENT_PRIVATE_KEY = process.env.HTTPS_CLIENT_PRIVATE_KEY || '';
+const credentials = {
 	key:  HTTPS_CLIENT_PRIVATE_KEY,
 	cert: HTTPS_CLIENT_CERT,
 };
 
-var app = express();
+const app = express();
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+//Register with arbiter and get secret
+macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
+	.then((secret) => {
+		app.use(bodyParser.json());
+		app.use(bodyParser.urlencoded({extended: true}));
 
-/*
-* DATABOX API Logging
-* Logs all requests and responses to/from the API in bunyan format in nedb
-*/
-var logsDb = require('./lib/log/databox-log-db.js')('../database/datastoreLOG.db');
-var databoxLoggerApi = require('./lib/log/databox-log-api.js');
-var databoxLogger = require('./lib/log/databox-log-middelware.js')(logsDb);
-app.use(databoxLogger);
+		app.get("/status", (req, res) => res.send("active"));
+
+		var wsVerifier;
+		if (!NO_SECURITY) {
+			//everything after here will require a valid macaroon
+			app.use(macaroonVerifier.verifier(secret, DATABOX_LOCAL_NAME));
+			wsVerifier = macaroonVerifier.wsVerifier(secret, DATABOX_LOCAL_NAME);
+		}
+
+		/*
+		* DATABOX API Logging
+		* Logs all requests and responses to/from the API in bunyan format in nedb
+		*/
+		
+		var databoxLogger = require('./lib/log/databox-log-middelware.js')();
+		app.use(databoxLogger);
+
+		var server = null;
+		if(credentials.cert === '' || credentials.key === '') {
+			var http = require('http');
+			console.log("WARNING NO HTTPS credentials supplied running in http mode!!!!");
+			server = http.createServer(app);
+		} else {
+			server = https.createServer(credentials,app);
+		}
+
+		app.use('/cat', hypercat(app, DATABOX_LOCAL_NAME, DATABOX_LOCAL_PORT));
+
+		var subscriptionManager = new SubscriptionManager(new WebSocketServer({
+			server,
+			verifyClient: wsVerifier,
+			path: '/ws'
+		}));
+
+		app.use('/read/ts/:datasourceid/:cmd', timeseries.read());
+		app.use('/write/ts/:datasourceid',     timeseries.write(subscriptionManager));
+
+		app.use('/read/json/:key',   keyvalue.read());
+		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
+
+		app.use('/sub',   subscriptionManager.sub());
+		app.use('/unsub', subscriptionManager.unsub());
+
+		server.listen(PORT, function () {
+			console.log("Listening on port " + PORT);
+		});
+	})
+	.catch((err) => {
+		console.log(err);
+	});
 
 
-//TODO app.use(Macaroon checker);
-
-app.get("/status", function(req, res) {
-    res.send("active");
-});
-app.get("/api/status", function(req, res) {
-    res.send("active");
-});
-
-app.use('/api/actuate',actuateRouter(app));
-
-app.use('/:var(api/data|api/ts)?',timeseriesRouter(app));
-
-app.use('/api/key',keyValueRouter(app));
-
-app.use('/api/cat',hypercat(app));
-
-app.use('/logs',databoxLoggerApi(app,logsDb));
-
-
-
-var server = null;
-if(credentials.cert === '' || credentials.key === '') {
-    var http = require('http');
-    console.log("WARNING NO HTTPS credentials supplied running in http mode!!!!");
-    server = http.createServer(app);
-} else {
-    server = https.createServer(credentials,app);
-}
-
-//Websocket connection to live stream data
-var WebSocketServer = require('ws').Server;
-app.wss = new WebSocketServer({ server: server });
-app.broadcastDataOverWebSocket = require('./lib/websockets/broadcastDataOverWebSocket.js')(app);
-
-server.listen(8080,function() {
-    console.log("listening on 8080");
-});
 module.exports = app;
