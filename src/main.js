@@ -16,6 +16,7 @@ const DATABOX_ARBITER_ENDPOINT = process.env.DATABOX_ARBITER_ENDPOINT || "https:
 // TODO: Refactor token to key here and in CM to avoid confusion with bearer tokens
 const ARBITER_KEY = process.env.ARBITER_TOKEN;
 const NO_SECURITY = !!process.env.NO_SECURITY;
+const NO_LOGGING = !!process.env.NO_LOGGING;
 
 const PORT = process.env.PORT || 8080;
 
@@ -49,8 +50,10 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 		* Logs all requests and responses to/from the API in bunyan format in nedb
 		*/
 		
-		var databoxLogger = require('./lib/log/databox-log-middelware.js')();
-		app.use(databoxLogger);
+		if (!NO_LOGGING) {
+			var databoxLogger = require('./lib/log/databox-log-middelware.js')();
+			app.use(databoxLogger);
+		}
 
 		var server = null;
 		if(credentials.cert === '' || credentials.key === '') {
@@ -69,11 +72,9 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 			path: '/ws'
 		}));
 
-		app.use('/read/ts/:datasourceid/:cmd', timeseries.read());
-		app.use('/write/ts/:datasourceid',     timeseries.write(subscriptionManager));
+		app.use('/:datasourceid/ts/:cmd?/:timestamp?/:endtimestamp?', timeseries.api(subscriptionManager));
 
-		app.use('/read/json/:key',   keyvalue.read());
-		app.use('/write/json/:key',  keyvalue.write(subscriptionManager));
+		app.use('/:key/json/',   keyvalue.api(subscriptionManager));
 
 		app.use('/sub',   subscriptionManager.sub());
 		app.use('/unsub', subscriptionManager.unsub());

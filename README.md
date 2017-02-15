@@ -10,26 +10,24 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 #Read API 
 
 ###Time series data   
-    URL: /read/ts/<datasourceid>/latest
-    Method: POST
+    URL: /<datasourceid>/ts/latest
+    Method: GET
     Parameters: <datasourceid> the datasourceid to get data for.
     Notes: will return the latest data based on the datasourceid 
     
-    URL: /read/ts/<datasourceid>/since
-    Method: POST
-    Parameters: <datasourceid> the datasourceid to get data for.
-    Post data: Raw JSON body containing elements as follows {timestamp: <timestamp in ms>}
-    Notes: will return the all data since the provided timestamp for the databox wide sensor_id
+    URL: /<datasourceid>/ts/since/<timestamp>
+    Method: GET
+    Parameters: <datasourceid> the datasourceid to get data for. <timestamp> the timestamp in ms to return records after
+    Notes: will return the all data since the provided timestamp for the provided datasourceid
     
-    URL: /read/ts/<datasourceid>/range
-    Method: POST
-    Parameters: <datasourceid> the datasourceid to get data for.
-    Post data:  Raw JSON body containing elements as follows {start: <start timestamp>, end: <end timestamp>}
-    Notes: will return the all data since the provided timestamp for the databox wide sensor_id
+    URL: /<datasourceid>/range/<startTimestamp>/<endTimestamp>
+    Method: GET
+    Parameters: <datasourceid> the datasourceid to get data for, a start: <startTimestamp> and end: <endTimestamp> for the range.
+    Notes: will return the all data between the provided start and end timestamps for the provided datasourceid.
     
 ###Key value pairs
 
-    URL: /read/key/<key>
+    URL: /<key>/key/
     Method: GET
     Parameters: replace <key> with document key 
     Notes: will return the data stored with that key. Returns an empty array 404 {status:404,error:"Document not found."} if no data is stored
@@ -62,14 +60,14 @@ Connect to a websocket client to port 8080. Then subscribe for data using:
     Notes: This data is used to populate the Items in the Hypercat catalog. The datasourceid is managed by the driver and must be unique to this store. 
     
 ###Time series data
-    URL: /write/ts/<datasourceid>
+    URL: /<datasourceid>/ts/
     Method: POST
     Parameters: Raw JSON body containing elements as follows {data: <json blob to store>}
     Notes: Stores a value a timestamp is added on insertion
     
 ###Key value pairs
 
-    URL: /write/key/<key>
+    URL: /<key>/key/
     Method: POST
     Parameters: Raw JSON body containing elements as follows {<data to be stored in JSON format>}
     Notes: will insert if the <key> is not in the database and update the document if it is.
@@ -111,4 +109,4 @@ Then restart the container manger to use you updated version.
 #Testing
 
     npm install --development 
-    npm test
+    NO_SECURITY=1 NO_LOGGING=1 npm test
