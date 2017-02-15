@@ -4,12 +4,12 @@ var assert = require('assert');
 
 
 describe('Add and retrieve latest TS values', function() {
-	it("Adds records posted to /write/ts", function(done) {
+	it("Adds records posted to :datasourceid/ts", function(done) {
 		var data = {
 	    	"data": 42,
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -18,12 +18,9 @@ describe('Add and retrieve latest TS values', function() {
 			});
 	});
 
-	it("retrieves latest records with /read/ts/latest", function(done) {
-		var data = {
-		}; 
+	it("Retrieves latest records with :datasourceid/ts/latest", function(done) {
 		supertest
-			.post("/read/ts/"+11+'/latest')
-			.send(data)
+			.get("/"+11+'/ts/latest')
 			.expect(200)
 			.end(function(err,result){
 				if(err) {
