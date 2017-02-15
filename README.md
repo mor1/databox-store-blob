@@ -111,4 +111,4 @@ Then restart the container manger to use you updated version.
 #Testing
 
     npm install --development 
-    npm test
+    NO_SECURITY=1 NO_LOGGING=1 npm test
