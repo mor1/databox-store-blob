@@ -7,7 +7,7 @@ db.ensureIndex({fieldName: 'timestamp', unique: false});
 
 // TODO: Consider OOP-ing this whole thing
 
-module.exports.read = function () {
+module.exports.api = function (subscriptionManager) {
 	var router = Router({mergeParams: true});
 
 	var latest = function (req, res, next) {
@@ -24,7 +24,7 @@ module.exports.read = function () {
 
 	var since = function (req, res, next) {
 		var datasource_id = req.params.datasourceid;
-		var timestamp = req.body.timestamp;
+		var timestamp = req.params.timestamp;
 		db.find({ datasource_id, $where: function () { return this.timestamp > timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
 				console.log('[Error]::', req.originalUrl, timestamp);
@@ -37,8 +37,8 @@ module.exports.read = function () {
 
 	var range = function (req, res, next) {
 		var datasource_id = req.params.datasourceid;
-		var start = req.body.start;
-		var end = req.body.end;
+		var start = req.params.timestamp;
+		var end = req.params.endtimestamp;
 
 		db.find({ datasource_id, $where: function () { return this.timestamp >= start && this.timestamp <= end; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
@@ -50,7 +50,8 @@ module.exports.read = function () {
 		});
 	};
 
-	router.post('/', function (req, res, next) {
+	router.get('/', function (req, res, next) {
+
 		var cmd = req.params.cmd;
 		if(cmd == 'latest') {
 			latest(req, res, next);
@@ -61,13 +62,8 @@ module.exports.read = function () {
 		if(cmd == 'range') {
 			range(req, res, next);
 		}
+		
 	});
-
-	return router;
-};
-
-module.exports.write = function (subscriptionManager) {
-	var router = Router({mergeParams: true});
 
 	// TODO: .all, see #15
 	router.post('/', function (req, res, next) {
@@ -86,9 +82,9 @@ module.exports.write = function (subscriptionManager) {
 			res.send(doc);
 		});
 
-		data.path = '/ts/' + req.params.sensor;
+		var path = '/ts/' + req.params.sensor;
+		subscriptionManager.emit(path, data);
 
-		subscriptionManager.emit(data.path, data);
 	});
 
 	return router;

@@ -6,18 +6,18 @@ var assert = require('assert');
 
 var recordSet = []; // store res from can POST /data/since to test /data/range
 
-describe('tests /read/ts/since', function() {
+describe('tests /ts/since', function() {
 	var data = {
 	    	"data": {new:"data", since:"world"},
 		}; 
 	var lastRecord = {};
 	
-	it("Adds records posted to /write/ts", function(done) {
+	it("Adds records posted to :timestamp/ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts/")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -28,7 +28,7 @@ describe('tests /read/ts/since', function() {
 
 	it('can get lastRecord',function(done){
 		supertest
-				.post("/read/ts/"+11+'/latest')
+				.get("/"+11+'/ts/latest')
 				.send(data)
 				.expect(200)
 				.end(function(err,result){
@@ -43,12 +43,12 @@ describe('tests /read/ts/since', function() {
 				});
 	});
 
-	it("Adds records posted to /write/ts", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -57,12 +57,12 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it("Adds records posted to /write/ts/", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world0"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -71,12 +71,12 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it("Adds records posted to /write/ts/", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world1"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -85,12 +85,12 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it("Adds records posted to /write/ts/", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world2"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -99,12 +99,12 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it("Adds records posted to /write/ts/", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world3"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -113,12 +113,12 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it("Adds records posted to /write/ts/", function(done) {
+	it("Adds records posted to /ts", function(done) {
 		var data = {
 	    	"data": {test:"data", hello:"world4"},
 		}; 
 		supertest
-			.post("/write/ts/"+11)
+			.post("/"+11+"/ts")
 			.send(data)
 			.expect(200)
 			.end(function(err,result){
@@ -127,15 +127,11 @@ describe('tests /read/ts/since', function() {
 			});
 	});
 
-	it('can POST /read/ts/since ' + lastRecord.timestamp  + ' and returns 6 items',function(done){
+	it('can POST /ts/since ' + lastRecord.timestamp  + ' and returns 6 items',function(done){
 		
-		data = {
-					"timestamp": lastRecord.timestamp,
-				};
-
+		
 		supertest
-				.post("/read/ts/"+11+'/since')
-				.send(data)
+				.get("/"+11+'/ts/since/'+lastRecord.timestamp)
 				.expect(200)
 				.end(function(err,result){
 					if(err) {
@@ -150,7 +146,7 @@ describe('tests /read/ts/since', function() {
 
 });
 
-describe('tests /read/ts/range', function() {
+/*describe('tests /read/ts/range', function() {
 	
 		it('can POST /read/ts/range and retrieve data ',function(done){
 		
@@ -173,4 +169,4 @@ describe('tests /read/ts/range', function() {
 						done();
 					});
 		});
-});
+});*/

@@ -7,7 +7,7 @@ db.ensureIndex({fieldName: 'datasource_id', unique: false});
 
 // TODO: Consider OOP-ing this whole thing
 
-module.exports.read = function () {
+module.exports.api = function (subscriptionManager) {
 	var router = Router({mergeParams: true});
 
 	// TODO: .all, see #15
@@ -31,19 +31,15 @@ module.exports.read = function () {
 		});
 	});
 
-	return router;
-};
-
-module.exports.write = function (subscriptionManager) {
-	var router = Router({mergeParams: true});
-
 	// TODO: .all, see #15
 	router.post('/', (req, res) => {
 		var key = req.params.key;
+		var data = req.body;
 		var doc = {
 			key: key,
-			data: req.body
+			data: data
 		};
+
 		db.update({ key }, doc, { upsert: true, returnUpdatedDocs: true }, function (err, numAffected, affectedDocuments, upsert) {
 			if (err) {
 				console.log("[Error]::", req.originalUrl, doc, err);
@@ -54,9 +50,8 @@ module.exports.write = function (subscriptionManager) {
 			res.send(affectedDocuments.data);
 		});
 
-		data.path = '/json/' + key;
-
-		subscriptionManager.emit(data.path, data);
+		var path = '/json/' + key;
+		subscriptionManager.emit(path, data);
 	});
 
 	return router;
