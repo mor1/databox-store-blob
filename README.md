@@ -34,7 +34,7 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 
 ###Websockets 
 
-Connect to a websocket client to port 8080. Then subscribe for data using: 
+Connect to a websocket client to `/ws`. Then subscribe for data using: 
 
     For time serries:  
 
