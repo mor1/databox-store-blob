@@ -82,7 +82,7 @@ module.exports.api = function (subscriptionManager) {
 			res.send(doc);
 		});
 
-		var path = '/ts/' + req.params.sensor;
+		var path = req.params.sensor + '/ts';
 		subscriptionManager.emit(path, data);
 
 	});
