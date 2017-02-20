@@ -50,7 +50,7 @@ module.exports.api = function (subscriptionManager) {
 			res.send(affectedDocuments.data);
 		});
 
-		var path = '/json/' + key;
+		var path = key + '/key';
 		subscriptionManager.emit(path, data);
 	});
 
