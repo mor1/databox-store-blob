@@ -4,7 +4,7 @@
 
 Databox Store for JSON data blobs handles time series and key value data. 
 
-The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API for live data.
+The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API for live data. All requests must have arbiter tokens passed as per section 7.1 of the [Hypercat 3.0 specs](https://shop.bsigroup.com/upload/276605/PAS212-corr.pdf). 
 
 
 #Read API 
@@ -38,7 +38,7 @@ Connect to a websocket client to `/ws`. Then subscribe for data using:
 
     For time serries:  
 
-    URL: /sub/ts/<datasourceid>
+    URL: /sub/<datasourceid>/ts
     Method: GET
     Parameters: replace <datasourceid> with datasourceid 
     Notes: Will broadcast over the websocket the data stored by datasourceid when data is added. 
@@ -46,7 +46,7 @@ Connect to a websocket client to `/ws`. Then subscribe for data using:
     
     For key value:  
 
-    URL: /sub/key/<key>
+    URL: /sub/<key>/key
     Method: GET
     Parameters: replace <key> with document key 
     Notes:  Will broadcast over the websocket the data stored with that key when it is add or updated. 
