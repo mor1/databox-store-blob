@@ -50,8 +50,10 @@ module.exports.api = function (subscriptionManager) {
 			res.send(affectedDocuments.data);
 		});
 
-		var path = key + '/key';
-		subscriptionManager.emit(path, data);
+		subscriptionManager.emit(key + '/key', {
+			datasource_id: key,
+			data: data,
+		});
 	});
 
 	return router;

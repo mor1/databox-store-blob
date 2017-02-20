@@ -82,9 +82,7 @@ module.exports.api = function (subscriptionManager) {
 			res.send(doc);
 		});
 
-		var path = req.params.sensor + '/ts';
-		subscriptionManager.emit(path, data);
-
+		subscriptionManager.emit(req.params.sensor + '/ts', data);
 	});
 
 	return router;
