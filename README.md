@@ -15,14 +15,16 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
     Parameters: <datasourceid> the datasourceid to get data for.
     Notes: will return the latest data based on the datasourceid 
     
-    URL: /<datasourceid>/ts/since/<timestamp>
+    URL: /<datasourceid>/ts/since
     Method: GET
-    Parameters: <datasourceid> the datasourceid to get data for. <timestamp> the timestamp in ms to return records after
+    URL Parameters: <datasourceid> the datasourceid to get data for.
+    Body Parameters: <startTimestamp> the timestamp in ms to return records after.
     Notes: will return the all data since the provided timestamp for the provided datasourceid
     
-    URL: /<datasourceid>/range/<startTimestamp>/<endTimestamp>
+    URL: /<datasourceid>/range
     Method: GET
-    Parameters: <datasourceid> the datasourceid to get data for, a start: <startTimestamp> and end: <endTimestamp> for the range.
+    URL Parameters: <datasourceid> the datasourceid to get data for
+    Body Parameters: <startTimestamp> and <endTimestamp> for the range.
     Notes: will return the all data between the provided start and end timestamps for the provided datasourceid.
     
 ###Key value pairs
