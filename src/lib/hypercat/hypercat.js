@@ -98,6 +98,7 @@ module.exports = function (expressApp, databox_local_name, databox_local_port) {
 	//Return the current Hypercat catalogue
 	router.get('/', function (req, res, next) {
 		res.header('Content-Type', 'application/json');
+		// TODO: Filter based on permissions
 		res.send(cat);
 	});
 
