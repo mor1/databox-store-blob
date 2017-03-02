@@ -56,10 +56,38 @@ Connect to a websocket client to `/ws`. Then subscribe for data using:
 #Write API
 
 ###Managing the data source catalog
-    URL: /cat/add/<datasourceid> 
+    URL: /cat
     Method: POST
-    Parameters: Raw JSON body containing elements as follows {vendor: <vendor name>, unit: <measurement unit>, location: <datasource location>, description:<human readable description>}
-    Notes: This data is used to populate the Items in the Hypercat catalog. The datasourceid is managed by the driver and must be unique to this store. 
+    Parameters: Raw JSON body containing a Hypercat item (as per PAS212 (https://shop.bsigroup.com/upload/276605/PAS212-corr.pdf) Table 2).
+    For example:
+    {
+		"item-metadata": [{
+				// NOTE: Required
+				"rel": "urn:X-hypercat:rels:hasDescription:en",
+				"val": "Test item"
+			}, {
+				// NOTE: Required
+				"rel": "urn:X-hypercat:rels:isContentType",
+				"val": "text/plain"
+			}, {
+				"rel": "urn:X-databox:rels:hasVendor",
+				"val": "Databox Inc."
+			}, {
+				"rel": "urn:X-databox:rels:hasType",
+				"val": "Test"
+			}, {
+				"rel": "urn:X-databox:rels:hasDatasourceid",
+				"val": "MyLongId"
+			}, {
+				"rel": "urn:X-databox:rels:isActuator",
+				"val": false
+			}, {
+				"rel": "urn:X-databox:rels:hasStoreType",
+				"val": "databox-store-blob"
+			}
+		],
+		"href": "https://databox-store-blob:8080"
+	}
     
 ###Time series data
     URL: /<datasourceid>/ts/
