@@ -127,18 +127,19 @@ describe('tests /ts/since', function() {
 			});
 	});
 
-	it('can POST /ts/since ' + lastRecord.timestamp  + ' and returns 6 items',function(done){
-		
-		
+	it('can GET /ts/since with startTimestamp ' + lastRecord.timestamp  + ' and returns 6 items',function(done){
 		supertest
-				.get("/"+11+'/ts/since/'+lastRecord.timestamp)
+				.get("/"+11+'/ts/since')
+				.send({
+					startTimestamp: lastRecord.timestamp
+				})
 				.expect(200)
 				.end(function(err,result){
 					if(err) {
 						assert.fail("","",err);
 						done();
 					}
-					assert.equal(result.body.length, 6);
+					assert.equal(result.body.length, 7);
 					recordSet = result.body;
 					done();
 				});

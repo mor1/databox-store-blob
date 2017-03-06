@@ -24,8 +24,8 @@ module.exports.api = function (subscriptionManager) {
 
 	var since = function (req, res, next) {
 		var datasource_id = req.params.datasourceid;
-		var timestamp = req.params.timestamp;
-		db.find({ datasource_id, $where: function () { return this.timestamp > timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
+		var timestamp = req.body.startTimestamp;
+		db.find({ datasource_id, $where: function () { return this.timestamp >= timestamp; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
 				console.log('[Error]::', req.originalUrl, timestamp);
 				// TODO: Status code + document
@@ -37,8 +37,8 @@ module.exports.api = function (subscriptionManager) {
 
 	var range = function (req, res, next) {
 		var datasource_id = req.params.datasourceid;
-		var start = req.params.timestamp;
-		var end = req.params.endtimestamp;
+		var start = req.body.startTimestamp;
+		var end = req.body.endTimestamp;
 
 		db.find({ datasource_id, $where: function () { return this.timestamp >= start && this.timestamp <= end; } }).sort({ timestamp: 1 }).exec(function (err, doc) {
 			if (err) {
@@ -82,9 +82,7 @@ module.exports.api = function (subscriptionManager) {
 			res.send(doc);
 		});
 
-		var path = '/ts/' + req.params.sensor;
-		subscriptionManager.emit(path, data);
-
+		subscriptionManager.emit(req.params.sensor + '/ts', data);
 	});
 
 	return router;

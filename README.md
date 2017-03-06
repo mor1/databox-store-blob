@@ -4,7 +4,7 @@
 
 Databox Store for JSON data blobs handles time series and key value data. 
 
-The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API for live data.
+The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API for live data. All requests must have arbiter tokens passed as per section 7.1 of the [Hypercat 3.0 specs](https://shop.bsigroup.com/upload/276605/PAS212-corr.pdf). 
 
 
 #Read API 
@@ -15,14 +15,16 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
     Parameters: <datasourceid> the datasourceid to get data for.
     Notes: will return the latest data based on the datasourceid 
     
-    URL: /<datasourceid>/ts/since/<timestamp>
+    URL: /<datasourceid>/ts/since
     Method: GET
-    Parameters: <datasourceid> the datasourceid to get data for. <timestamp> the timestamp in ms to return records after
+    URL Parameters: <datasourceid> the datasourceid to get data for.
+    Body Parameters: <startTimestamp> the timestamp in ms to return records after.
     Notes: will return the all data since the provided timestamp for the provided datasourceid
     
-    URL: /<datasourceid>/range/<startTimestamp>/<endTimestamp>
+    URL: /<datasourceid>/range
     Method: GET
-    Parameters: <datasourceid> the datasourceid to get data for, a start: <startTimestamp> and end: <endTimestamp> for the range.
+    URL Parameters: <datasourceid> the datasourceid to get data for
+    Body Parameters: <startTimestamp> and <endTimestamp> for the range.
     Notes: will return the all data between the provided start and end timestamps for the provided datasourceid.
     
 ###Key value pairs
@@ -34,11 +36,11 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
 
 ###Websockets 
 
-Connect to a websocket client to port 8080. Then subscribe for data using: 
+Connect to a websocket client to `/ws`. Then subscribe for data using: 
 
     For time serries:  
 
-    URL: /sub/ts/<datasourceid>
+    URL: /sub/<datasourceid>/ts
     Method: GET
     Parameters: replace <datasourceid> with datasourceid 
     Notes: Will broadcast over the websocket the data stored by datasourceid when data is added. 
@@ -46,7 +48,7 @@ Connect to a websocket client to port 8080. Then subscribe for data using:
     
     For key value:  
 
-    URL: /sub/key/<key>
+    URL: /sub/<key>/key
     Method: GET
     Parameters: replace <key> with document key 
     Notes:  Will broadcast over the websocket the data stored with that key when it is add or updated. 
@@ -54,10 +56,38 @@ Connect to a websocket client to port 8080. Then subscribe for data using:
 #Write API
 
 ###Managing the data source catalog
-    URL: /cat/add/<datasourceid> 
+    URL: /cat
     Method: POST
-    Parameters: Raw JSON body containing elements as follows {vendor: <vendor name>, unit: <measurement unit>, location: <datasource location>, description:<human readable description>}
-    Notes: This data is used to populate the Items in the Hypercat catalog. The datasourceid is managed by the driver and must be unique to this store. 
+    Parameters: Raw JSON body containing a Hypercat item (as per PAS212 (https://shop.bsigroup.com/upload/276605/PAS212-corr.pdf) Table 2).
+    For example:
+    {
+		"item-metadata": [{
+				// NOTE: Required
+				"rel": "urn:X-hypercat:rels:hasDescription:en",
+				"val": "Test item"
+			}, {
+				// NOTE: Required
+				"rel": "urn:X-hypercat:rels:isContentType",
+				"val": "text/plain"
+			}, {
+				"rel": "urn:X-databox:rels:hasVendor",
+				"val": "Databox Inc."
+			}, {
+				"rel": "urn:X-databox:rels:hasType",
+				"val": "Test"
+			}, {
+				"rel": "urn:X-databox:rels:hasDatasourceid",
+				"val": "MyLongId"
+			}, {
+				"rel": "urn:X-databox:rels:isActuator",
+				"val": false
+			}, {
+				"rel": "urn:X-databox:rels:hasStoreType",
+				"val": "databox-store-blob"
+			}
+		],
+		"href": "https://databox-store-blob:8080"
+	}
     
 ###Time series data
     URL: /<datasourceid>/ts/
