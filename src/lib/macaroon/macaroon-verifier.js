@@ -183,6 +183,11 @@ module.exports.verifier = function (secret, storeName) {
 module.exports.wsVerifier = function (secret, storeName) {
 	// TODO: See me-box/databox-store-blob issue #19
 	return function (info, callback) {
+		if (!info.secure) {
+			callback(false, 426, 'Connection must be over secure WebSockets');
+			return;
+		}
+
 		// Extract token as per Hypercat PAS 212 7.1 for uniformity
 		var creds = basicAuth(info);
 		var macaroon = info.req.headers['x-api-key'] || (creds && creds.name);
@@ -204,6 +209,8 @@ module.exports.wsVerifier = function (secret, storeName) {
 
 		// Verify "target" caveat
 		macaroon.satisfyExact("target = " + storeName);
+
+		macaroon.satisfyExact("method = " + info.req.method);
 
 		macaroon.satisfyGeneral(createPathVerifier(url.parse(info.req.url).pathname));
 
