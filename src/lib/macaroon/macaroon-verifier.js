@@ -205,6 +205,8 @@ module.exports.wsVerifier = function (secret, storeName) {
 		// Verify "target" caveat
 		macaroon.satisfyExact("target = " + storeName);
 
+		macaroon.satisfyExact("method = " + info.req.method);
+
 		macaroon.satisfyGeneral(createPathVerifier(url.parse(info.req.url).pathname));
 
 		// TODO: Verify granularity etc here (or potentially in tandem with driver)?
