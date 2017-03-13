@@ -18,10 +18,9 @@ module.exports = class extends EventEmitter {
 
 			// TODO: See me-box/databox-store-blob issue #19
 			this.clients[macaroon.identifier] = ws;
-
-			ws.on('close', () => {
+			ws.on('close', (code, reason) => {
 				delete this.clients[macaroon.identifier];
-				console.log('Client parted:', macaroon.identifier);
+				console.log('Client parted:', macaroon.identifier,code, reason);
 			});
 		})
 	}
@@ -30,7 +29,7 @@ module.exports = class extends EventEmitter {
 		return (req, res) => {
 			// NOTE: Don't need to check anyhting here since it's all already covered by the path caveat
 			// TODO: See me-box/databox-store-blob issue #19
-			const id   = req.macaroon.identifier;
+			const id = req.macaroon.identifier;
 
 			if (!(id in this.clients)) {
 				// TODO: See me-box/databox-store-blob issue #19
@@ -42,14 +41,16 @@ module.exports = class extends EventEmitter {
 
 			var listener = (data) => {
 				// TODO: Error handling
+				console.log("[WS] Sending data");
 				ws.send(JSON.stringify(data));
 				//TODO: Logging 
 			};
 
+			console.log("[NEW SUBSCRIPTION] ", req.path);
 			this.on(req.path, listener);
 
-			ws.on('close', () => {
-				this.removeListener(req.path, listener);
+			ws.on('close', (code, reason) => {
+				console.log('Client parted 2:', code, reason);
 			});
 
 			res.send();
