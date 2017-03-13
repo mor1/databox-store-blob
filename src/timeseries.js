@@ -82,7 +82,8 @@ module.exports.api = function (subscriptionManager) {
 			res.send(doc);
 		});
 
-		subscriptionManager.emit(req.params.sensor + '/ts', data);
+		console.log("New data written subscriptionManager.emit:",req.params.datasourceid + '/ts', data);
+		subscriptionManager.emit('/' + req.params.datasourceid + '/ts', data);
 	});
 
 	return router;
