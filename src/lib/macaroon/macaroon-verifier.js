@@ -1,5 +1,5 @@
 var url = require('url');
-var databoxRequest = require('../databox-request/databox-request.js');
+var databoxRequest = require('../databox-request/databox-request-promise.js');
 var basicAuth = require('basic-auth');
 var macaroons = require('macaroons.js');
 var pathToRegexp = require('path-to-regexp');
@@ -24,6 +24,8 @@ module.exports.getSecretFromArbiter = function(arbiterKey) {
 				return;
 			}
 			resolve(new Buffer(body, 'base64'));
+		}).catch((err)=>{
+			console.log('[Error] getting /store/secret');
 		});
 
 	});
