@@ -1,6 +1,7 @@
 "use strict";
 
 const EventEmitter = require('events');
+const WebSocket = require('ws');
 
 // TODO: Singleton vs OOP?
 module.exports = class extends EventEmitter {
@@ -42,7 +43,11 @@ module.exports = class extends EventEmitter {
 			var listener = (data) => {
 				// TODO: Error handling
 				console.log("[WS] Sending data");
-				ws.send(JSON.stringify(data));
+				if(ws.readyState === WebSocket.OPEN) {
+					ws.send(JSON.stringify(data));
+				} else {
+					console.log("[WS] Not sending data WS not open");
+				}
 				//TODO: Logging 
 			};
 

@@ -17,6 +17,7 @@ module.exports.api = function (subscriptionManager) {
 				console.log('[Error]::', req.originalUrl);
 				// TODO: Status code + document
 				res.send(err);
+				return
 			}
 			res.send(doc);
 		});
@@ -30,6 +31,7 @@ module.exports.api = function (subscriptionManager) {
 				console.log('[Error]::', req.originalUrl, timestamp);
 				// TODO: Status code + document
 				res.send(err);
+				return;
 			}
 			res.send(doc);
 		});
@@ -45,6 +47,7 @@ module.exports.api = function (subscriptionManager) {
 				console.log('[Error]::', req.originalUrl, timestamp);
 				// TODO: Status code + document
 				res.send(err);
+				return;
 			}
 			res.send(doc);
 		});
@@ -78,6 +81,7 @@ module.exports.api = function (subscriptionManager) {
 				console.log('[Error]::', req.originalUrl, data, err);
 				// TODO: Status code + document
 				res.send(err);
+				return;
 			}
 			res.send(doc);
 		});
