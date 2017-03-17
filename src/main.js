@@ -74,7 +74,7 @@ macaroonVerifier.getSecretFromArbiter(ARBITER_KEY)
 
 		app.use('/:datasourceid/ts/:cmd?/:timestamp?/:endtimestamp?', timeseries.api(subscriptionManager));
 
-		app.use('/:key/json/',   keyvalue.api(subscriptionManager));
+		app.use('/:key/kv/', keyvalue.api(subscriptionManager));
 
 		app.use('/sub',   subscriptionManager.sub());
 		app.use('/unsub', subscriptionManager.unsub());

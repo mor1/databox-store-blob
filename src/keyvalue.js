@@ -50,7 +50,7 @@ module.exports.api = function (subscriptionManager) {
 			res.send(affectedDocuments.data);
 		});
 
-		subscriptionManager.emit('/' + key + '/key', {
+		subscriptionManager.emit('/' + key + '/kv', {
 			datasource_id: key,
 			data: data,
 		});

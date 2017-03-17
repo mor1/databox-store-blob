@@ -2,7 +2,7 @@
 
 # databox-store-blob
 
-Databox Store for JSON data blobs handles time series and key value data. 
+Databox Store for JSON data blobs handles time series and key value data.
 
 The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API for live data. All requests must have arbiter tokens passed as per section 7.1 of the [Hypercat 3.0 specs](https://shop.bsigroup.com/upload/276605/PAS212-corr.pdf). 
 
@@ -29,9 +29,9 @@ The datastore exposes an HTTP-based API on port 8080 and a WebSocket based API f
     
 ###Key value pairs
 
-    URL: /<key>/key/
+    URL: /<key>/kv/
     Method: GET
-    Parameters: replace <key> with document key 
+    Parameters: replace <key> with document key
     Notes: will return the data stored with that key. Returns an empty array 404 {status:404,error:"Document not found."} if no data is stored
 
 ###Websockets 
@@ -48,7 +48,7 @@ Connect to a websocket client to `/ws`. Then subscribe for data using:
     
     For key value:  
 
-    URL: /sub/<key>/key
+    URL: /sub/<key>/kv
     Method: GET
     Parameters: replace <key> with document key 
     Notes:  Will broadcast over the websocket the data stored with that key when it is add or updated. 
@@ -97,7 +97,7 @@ Connect to a websocket client to `/ws`. Then subscribe for data using:
     
 ###Key value pairs
 
-    URL: /<key>/key/
+    URL: /<key>/kv/
     Method: POST
     Parameters: Raw JSON body containing elements as follows {<data to be stored in JSON format>}
     Notes: will insert if the <key> is not in the database and update the document if it is.
