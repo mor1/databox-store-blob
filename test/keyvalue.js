@@ -16,9 +16,9 @@ describe('Add and retrieve by key', function() {
     var data2 = {test:"data", hello:"world", goodby:'world'}; 
     var key = Date.now();
 	
-    it("Handles invalid key on read /json", function(done) {
+    it("Handles invalid key on read /kv", function(done) {
 		supertest
-			.get("/asdfgfhjkl/json/")
+			.get("/asdfgfhjkl/kv/")
 			.expect(500)
 			.end((err,result)=>{
 				//assert.deepEqual(result.body, {status:404,error:"Document not found."});
@@ -26,9 +26,9 @@ describe('Add and retrieve by key', function() {
 			});
 	})
 
-    it("Adds records posted to :key/json/", function(done) {
+    it("Adds records posted to :key/kv/", function(done) {
 		supertest
-			.post("/"+key+"/json/")
+			.post("/"+key+"/kv/")
 			.send(data)
 			.expect(200)
 			.end((err,result)=>{
@@ -37,10 +37,10 @@ describe('Add and retrieve by key', function() {
 			});
 	})
 
-	it("retrieves latest records with " + key + "/json/ ", function(done) {
+	it("retrieves latest records with " + key + "/kv/ ", function(done) {
 		
 		supertest
-			.get("/"+key+"/json/")
+			.get("/"+key+"/kv/")
 			.expect(200)
 			.end(function(err,result){
 				if(err) {
@@ -53,9 +53,9 @@ describe('Add and retrieve by key', function() {
 			});
 	});
 
-    it("Updates records posted to :key/json", function(done) {
+    it("Updates records posted to :key/kv", function(done) {
 		supertest
-			.post("/"+key+"/json")
+			.post("/"+key+"/kv")
 			.send(data2)
 			.expect(200)
 			.end((err,result)=>{
@@ -64,10 +64,10 @@ describe('Add and retrieve by key', function() {
 			});
 	});
 
-    it("retrieves latest records with /" + key + "/json/", function(done) {
+    it("retrieves latest records with /" + key + "/kv/", function(done) {
 		
 		supertest
-			.get("/"+key+"/json")
+			.get("/"+key+"/kv")
 			.expect(200)
 			.end(function(err,result){
 				if(err) {
